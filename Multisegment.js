@@ -3,7 +3,10 @@
  with independent RGB settings and effects. Designed for easy JSON access
  to allow control from home automation hubs and the like.
  
- Version 1.0.0 JEM(ZRanger1) 07/20/2020 
+ Version  Author        Date        Comment
+ 1.0.0    JEM(ZRanger1) 07/20/2020 
+ 1.0.1    JEM(ZRanger1) 07/22/2020  Add missing on/off switch to UI
+ 
 */
 
 // CONSTANTS 
@@ -27,6 +30,7 @@ var __n_locals = 3;      // max number of per-segment local variables
 export var activeSeg = 0;
 
 // vars for mild hack to isolate sliders from one another
+var lastState = 0;
 var lastColor = 0;
 var lastEffect = 0;
 var lastSpeed = 0;
@@ -72,6 +76,13 @@ var localStore = array(__n_locals * __n_segments);
 export function sliderActiveSegment(v) {
   lastSeg = activeSeg;
   activeSeg = ceil(v * (__n_segments - 1));
+}
+
+export function sliderState(v) {
+  if (lastState != v) {
+    segTable[activeSeg][__state] = floor(v);
+  }
+  lastState = v;
 }
 
 export function sliderEffect(v) {
@@ -207,16 +218,6 @@ function Initialize() {
 // TBD - add custom calls to zone setup functions here!
 
 } 
-
-// given a pixel index, return the number of the segment it is in.
-// (This is the slow way -- if you're short on memory and/or have a large
-// number of pixels, use this instead of indexing through segMap. This )
-function GetSegNumber(pix) { 
-  for (var i = __n_segments - 1; i >= 0; i--) {
-    if (pix > segStart[i]) return i;
-  }	 
-  return 0;  
-}
 
 // EFFECTS FUNCTIONS
 // parameters for preXXX(z,a,delta) fns are:
