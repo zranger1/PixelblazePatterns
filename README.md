@@ -11,14 +11,14 @@ The slider UI allows you to play with all the settings.  You can also control
 each segment via json from an external progam -- it exports an array per segment
 with each segment's current settings.
 
-If you are using <n> segments, the arrays will be named z_0 - z_<n-1>. The number 
+If you are using ```<n>``` segments, the arrays will be named ```z_0 - z_<n-1>```. The number 
 of segments is also exported to json in the variable ```__n_segments```.  Checking for this
 variable with ```getVars``` is one way for an external program to reliably determine that 
 the multisegment pattern is running on the Pixelblaze.  The pattern code has a description
 of the layout of each array.
 
 Multisegment comes configured for four segments, but there is no absolute limit to the number
-of segments you can run. To add segments, edit the code to allocate more z_<n> arrays,
+of segments you can run. To add segments, edit the code to allocate more ```z_<n>``` arrays,
 add them to ```segTable``` in the function ```initialize()``` and update the ```__n_segments``` 
 variable.  That's it... everything else will just work, though each segment adds a little 
 additional overhead.  I'd guess 8 to 10 segments to be the practical limit.
