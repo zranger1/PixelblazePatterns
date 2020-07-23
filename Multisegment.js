@@ -262,9 +262,6 @@ function renderRBounce(z,a,index) {
 function preKITT(z,a,delta) {
   SetVar(z,0,max(3,a[__size] / 5)); 
   SetVar(z,1,triangle(time(.03 * a[__speed])) * a[__size]);
-  
-  g1 = GetVar(z,0)
-  g2 = GetVar(z,1)
 }
 
 function renderKITT(z,a,index) {
