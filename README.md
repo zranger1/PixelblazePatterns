@@ -38,12 +38,18 @@ Twelve effects are built in.  They are:
 10. **Random Wipe** - random color wipe
 11. **Springy Theater** - theater style chaser lights that also change distance.
 
+## cellularautomata1d.js
+Renders elementary cellular automata as described by https://mathworld.wolfram.com/ElementaryCellularAutomaton.html
+Looks good on a linear LED strip, great on a strip rolled around a pipe or tube!  Can give Star Trek style blinky
+computer lights that must be calculating Something Very Important, or more flowing visuals, depending on
+parameters.
+
 ## midpointdisplacement1d.js
 Very fast, organic looking "plasma" patterns!
 
 Uses the recursive midpoint displacement algorithm to create a 1d heightmap of
 fractal-ish dimension, then animates by sweeping colors up and down the map. Allows
-control of many of parameters, and can produce effects ranging from complete chaos to
+control of many parameters, and can produce effects ranging from complete chaos to
 very smooth moving blends.
 
 ## hypersnow.js
