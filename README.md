@@ -38,6 +38,17 @@ Twelve effects are built in.  They are:
 10. **Random Wipe** - random color wipe
 11. **Springy Theater** - theater style chaser lights that also change distance.
 
+
+## darkbolt.js
+Fires an accelerating bolt of darkness down a colored strip. A nice effect on long linear strips. 
+There are sliders to control background color, bolt size, speed and direction.
+
+## badfluorescent.js
+A Totally Accurate Simulation of a failing fluorescent tube.  Features dim, flickering ends, periodic arc failure,
+odd color changes... Will remind you why LEDs are better!  This is part of my complete technological overkill bathroom
+mirror lighting system, which reproduces the colors of several different light sources.  It um, sorta snuck in there, and
+insists on running every April 1.
+
 ## cellularautomata1d.js
 Renders elementary cellular automata as described by https://mathworld.wolfram.com/ElementaryCellularAutomaton.html
 Looks good on a linear LED strip, great on a strip rolled around a pipe or tube!  Can give Star Trek style blinky
