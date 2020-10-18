@@ -1,6 +1,27 @@
 # PixelblazePatterns
 Patterns for Pixelblaze LED controller
 
+## linesplash.js
+Creates "waves", drawn as a line on a 2D LED matrix, by randomly dropping objects
+from random heights into a linear "pond".
+
+This pattern is fallout from an experiment in using easy-to=compute parts to create a
+complex, chaotic-seeming result.  For performance reasons, it's actually built using a simple 
+system of virtual "springs", rather than actual fluid dynamics.
+
+Requires a 2D display and appropriate pixel mapper.  Note that you **MUST** set your display 
+dimensions in the pattern code for things to work correctly.
+
+## darkbolt.js
+Fires an accelerating bolt of darkness down a colored strip. A nice effect on long linear strips. 
+There are sliders to control background color, bolt size, speed and direction.
+
+## badfluorescent.js
+A Totally Accurate Simulation of a failing fluorescent tube.  Features dim, flickering ends, periodic arc failure,
+odd color changes... Will remind you why LEDs are better!  This is part of my complete technological overkill bathroom
+mirror lighting system, which reproduces the colors of several different light sources.  It um, sorta snuck in there, and
+insists on running every April 1.
+
 ## multisegment.js
 Allows you to subdivide an LED strip into multiple, independently
 controllable segments.  For each segment, you can control on/off state,
@@ -38,16 +59,6 @@ Twelve effects are built in.  They are:
 10. **Random Wipe** - random color wipe
 11. **Springy Theater** - theater style chaser lights that also change distance.
 
-
-## darkbolt.js
-Fires an accelerating bolt of darkness down a colored strip. A nice effect on long linear strips. 
-There are sliders to control background color, bolt size, speed and direction.
-
-## badfluorescent.js
-A Totally Accurate Simulation of a failing fluorescent tube.  Features dim, flickering ends, periodic arc failure,
-odd color changes... Will remind you why LEDs are better!  This is part of my complete technological overkill bathroom
-mirror lighting system, which reproduces the colors of several different light sources.  It um, sorta snuck in there, and
-insists on running every April 1.
 
 ## cellularautomata1d.js
 Renders elementary cellular automata as described by https://mathworld.wolfram.com/ElementaryCellularAutomaton.html
