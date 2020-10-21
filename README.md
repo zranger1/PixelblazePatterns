@@ -1,6 +1,16 @@
 # PixelblazePatterns
 Patterns for Pixelblaze LED controller
 
+## oasis.js
+ Peaceful light dances on waves of green and blue.
+ 
+ A quiet space to rest and reflect on what we've 
+ lost in this strangest of years, and to remember
+ the beauty that remains, and the tasks that 
+ must still be begun and finished...
+ 
+ Inspired by FASTLed's Pacifica effect
+
 ## linesplash.js
 Creates "waves", drawn as a line on a 2D LED matrix, by randomly dropping objects
 from random heights into a linear "pond".
@@ -58,7 +68,6 @@ Twelve effects are built in.  They are:
 9. **Strobe** - hideous, but you never known when a rave may occur. Be prepared.
 10. **Random Wipe** - random color wipe
 11. **Springy Theater** - theater style chaser lights that also change distance.
-
 
 ## cellularautomata1d.js
 Renders elementary cellular automata as described by https://mathworld.wolfram.com/ElementaryCellularAutomaton.html
