@@ -71,17 +71,17 @@ function waveForward(n) {
 // gamma corrected value. TODO - need to find faster  n % 1 method.
 function gammatron(index) {
   var v,n;
-  n = (((index + layer1[3]) * layer1[2])) / pixelCount;
-  v = gamma[511 * (n % 1)];
+  n = ((index + layer1[3]) * layer1[2]) / pixelCount;
+  v = gamma[512 * (n % 1)];
   
-  n = (((index + layer2[3]) * layer2[2])) / pixelCount;
-  v += gamma[511 * (n % 1)];
+  n = ((index + layer2[3]) * layer2[2]) / pixelCount;
+  v += gamma[512 * (n % 1)];
 
-  n = (((index + layer3[3]) * layer3[2])) / pixelCount;
-  v += gamma[511 * (n % 1)];
+  n = ((index + layer3[3]) * layer3[2]) / pixelCount;
+  v += gamma[512 * (n % 1)];
 
-  n = (((index + layer4[3]) * layer4[2])) / pixelCount;
-  v += gamma[511 * (n % 1)];
+  n = ((index + layer4[3]) * layer4[2]) / pixelCount;
+  v += gamma[512 * (n % 1)];
   
   return v / 4;
 }  
