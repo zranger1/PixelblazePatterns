@@ -6,7 +6,7 @@
  Version  Author        Date        Comment
  1.0.0    JEM(ZRanger1) 07/20/2020 
  1.0.1    JEM(ZRanger1) 07/22/2020  Add missing on/off switch to UI
- 
+ 1.0.2    JEM(ZRanger1) 10/27/2020  Add flag to enable/disable sliders
 */
 
 // CONSTANTS 
@@ -72,13 +72,24 @@ var segEnabled = array(__n_segments);
 // per-segment scratch variable storage, used by effects
 var localStore = array(__n_locals * __n_segments); 
 
+// enable/disable the Pixelblaze Web UI sliders
+// If you're using multisegment with a home automation system,
+// they tend to interfere.  Consider using them for initial setup,
+// then disabling by setting this variable to 0 when you have everything
+// configured.
+var useSliderUI = 1;
+
 // UI 
 export function sliderActiveSegment(v) {
+  if (!useSliderUI) return;
+  
   lastSeg = activeSeg;
   activeSeg = ceil(v * (__n_segments - 1));
 }
 
 export function sliderState(v) {
+  if (!useSliderUI) return;  
+  
   if (lastState != v) {
     segTable[activeSeg][__state] = floor(v);
   }
@@ -86,6 +97,8 @@ export function sliderState(v) {
 }
 
 export function sliderEffect(v) {
+  if (!useSliderUI) return;  
+  
   v = floor(v * (__n_effects - 1));
   if (lastEffect != v){
     segTable[activeSeg][__effect] = v;
@@ -94,6 +107,7 @@ export function sliderEffect(v) {
 }
 
 export function sliderSpeed(v) {
+  if (!useSliderUI) return;  
 // set up so the default speed for a pattern falls in the 
 // middle of the slider range, and moving right makes
 // things faster.
@@ -104,6 +118,8 @@ export function sliderSpeed(v) {
 }
 
 export function sliderSize(v) {
+  if (!useSliderUI) return;  
+  
 // can't directly change last segment from UI
   if (activeSeg >= -1 + __n_segments) return;
   
@@ -115,6 +131,8 @@ export function sliderSize(v) {
 }
 
 export function hsvPickerColor(h, s, v) {
+  if (!useSliderUI) return;
+  
   if (lastColor != (h+s+v)) {
     segTable[activeSeg][__hue] = h;
     segTable[activeSeg][__sat] = s;
@@ -201,7 +219,7 @@ function Initialize() {
   segTable[2] = z_2;
   segTable[3] = z_3;	
 
-// start with all zones on, equal in size, and set to random colors.
+// start with all zones on, equal in size, and set to reasonable colors.
 //
 // IMPORTANT NOTE:
 // To customize your starting segment sizes and colors, you can 
@@ -211,10 +229,11 @@ function Initialize() {
    for (i = 0; i < __n_segments; i++) {
       SetSegState(i,true);     
 	    SetSegEffect(i,0)
-      SetSegHSB(i,random(1),1,0.60)
+      SetSegHSB(i,i / __n_segments,1,0.60)
       SetSegSpeed(i,1);
       SetSegSize(i,floor(pixelCount / __n_segments));
    }
+
 // TBD - add custom calls to zone setup functions here!
 
 } 

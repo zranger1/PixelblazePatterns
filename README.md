@@ -42,6 +42,11 @@ The slider UI allows you to play with all the settings.  You can also control
 each segment via json from an external progam -- it exports an array per segment
 with each segment's current settings.
 
+**New:** If you're using multisegment with a home automation system, the sliders may interfere with
+setup.  So as of v1.0.2, there is a variable in the pattern that allows you to completely
+disable the sliders once you've got things set up.  It's ```useSliderUI``` around line
+80.  Set it to 0 to disable sliders, to 1 to enable them.
+
 If you are using ```<n>``` segments, the arrays will be named ```z_0 - z_<n-1>```. The number 
 of segments is also exported to json in the variable ```__n_segments```.  Checking for this
 variable with ```getVars``` is one way for an external program to reliably determine that 
