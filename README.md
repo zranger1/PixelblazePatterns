@@ -22,6 +22,30 @@ system of virtual "springs", rather than actual fluid dynamics.
 Requires a 2D display and appropriate pixel mapper.  Note that you **MUST** set your display 
 dimensions in the pattern code for things to work correctly.
 
+## gpiosynchronizer.js
+ A set of utility functions that let you use the Pixelblaze's GPIO capability to
+ synchronize patterns between two Pixelblazes.  It requires a only small amount of soldering,
+ and minor changes to your pattern.  No external hardware or software are needed.
+ 
+ **CAUTION:**  Soldering and basic electronic skills required! To use this, you must connect
+ two GPIO pins on each Pixelblaze -- one pin for reading, the other for writing. Be very sure that your
+ Pixelblazes are connected to a common ground, or this will almost certainly not work.
+
+ I used GPIO4 and GPIO5 because they were easy to solder, and easy to use. The software lets you choose
+ which pin is used for reading and which for writing, software you can wire your pins crossing 4-5, 5-4 
+ if you want to use the same pattern on both Pixelblazes, or you can wire them straight across 4-4, 5-5, and cross
+ in software by using initGPIO(4,5) on one Pixelblaze and initGPIO(5,4) on the other. 
+ 
+ To use te software, wire up your Pixelblazes, copy the utility code into your pattern and: 
+ - Call initGPIO(inPin,outPin) to set up your GPIO pins
+ - Call synchronize(delta) from your beforeRender() function
+ - Call syncTime() instead of time() for things that need to
+   be synchronized.
+ - To manually initiate synchronization, call requestSync()
+ 
+ That's it -- your Pixelblazes will synchronize as soon as both are running a gpiosynchronizer-equipped pattern. If
+ sync drifts over time, or because of user action, you can add calls to requestSync() as needed. 
+
 ## darkbolt.js
 Fires an accelerating bolt of darkness down a colored strip. A nice effect on long linear strips. 
 There are sliders to control background color, bolt size, speed and direction.
