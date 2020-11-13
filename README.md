@@ -2,14 +2,20 @@
 Patterns for Pixelblaze LED controller
 
 ## bouncer3D.js
- Bounces from 1 to 20 square (or cubic) tiles around the display. Sliders let
- you set object count, size and speed.
+ Says "3D", but works on both 2D and 3D displays!
 
- This is really an early proof-of-concept for a set of vector utilities
- I'm building, but it turned out interesting enough to stand on its own as a pattern.   
- 
- Works on both 2D and 3D displays. Requires an appropriate pixel mapper.
- 
+ Bounces from 1 to 20 balls around a 2D or 3D display. Sliders let
+ you set object count, size and speed.  In 3D, it looks best on 
+ volumetric objects.
+
+ This started as a proof-of-concept for a set of vector utilities, 
+ but it turned out interesting enough to stand on its own as a pattern.   
+
+ Because of the way it is optimized, performance goes down, as you'd expect
+ with number of objects. But it can go back up as you increase object size.
+ There's some fun to be had playing with these parameters to maximize frame
+ rate for a given number of objects.
+
 ## oasis.js
  Peaceful light dances on waves of green and blue.
  

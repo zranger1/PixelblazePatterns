@@ -1,13 +1,13 @@
 /*
  Bouncer 2D/3D
  
- Bounces (up to 20) rectangular (or cubic) objects around a 2D or 3D display. 
- Use sliders to set "ball" count, size and speed.
+ Bounces (up to 20) balls objects around a 2D or 3D display. 
+ Use sliders to set "ball" count, size and speed.  
  
  Requires a 2D or 3D LED array and appropriate pixel mapper.
  
  Version  Author        Date        Comment
- 1.0.0    JEM(ZRanger1) 11/11/2020 
+ 1.0.1    JEM(ZRanger1) 11/12/2020 
 */ 
 
 // Global Variables
@@ -15,6 +15,7 @@ var maxBalls = 20;
 export var numBalls = 6;
 export var ballSize = 0.06;
 export var speed = 0.075;
+export var ballSize3D = ballSize * 4 ;
 
 // array of ball vectors
 var balls = array(maxBalls);
@@ -26,6 +27,7 @@ export function sliderBalls(v) {
 
 export function sliderSize(v) {
   ballSize = 0.2 * v;
+  ballSize3D = ballSize * 4;
 }
 
 export function sliderSpeed(v) {
@@ -87,31 +89,42 @@ export function beforeRender(delta) {
   bounce();
 }
 
+
 export function render2D(index,x,y) {
-  v = 0;
+  var dx,dy;  
+  var s = 1;
+  var v = 0;
+
   for (var i = 0; i < numBalls; i++) {
-    if (abs(balls[i][0] - x) > ballSize) continue;
-    if (abs(balls[i][1] - y) <= ballSize) { 
-      v = 1
+    if ((dx = abs(balls[i][0] - x)) > ballSize) continue;
+    if ((dy = abs(balls[i][1] - y)) <= ballSize) { 
+      v = (dx + dy) / ballSize;  v = v * v;
+      s = v * 4; 
+      v = 1-v;
       h = balls[i][6];
       break;
     }  
   }
      
-  hsv(h, 1, v)
+  hsv(h, s, v)
 }
 
 export function render3D(index,x,y,z) {
-  v = 0;
+  var dx,dy,dz;  
+  var v = 0;
+  var s = 1;
+  
   for (var i = 0; i < numBalls; i++) {
-    if (abs(balls[i][0] - x) > ballSize) continue;
-    if (abs(balls[i][1] - y) > ballSize) continue;
-    if (abs(balls[i][2] - z) <= ballSize) {
-      v = 1;
+    if ((dx = abs(balls[i][0] - x)) > ballSize3D) continue;
+    if ((dy = abs(balls[i][1] - y)) > ballSize3D) continue;
+    if ((dz = abs(balls[i][2] - z)) <= ballSize3D) {
+      v = (dx + dy + dz) / ballSize3D;  v = v * v;
+      s = v * 4; 
+      v = 1-v;
       h = balls[i][6];
       break;
     }
   }
      
-  hsv(h, 1, v)
+  hsv(h, s, v)
 }
