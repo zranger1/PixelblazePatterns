@@ -125,9 +125,8 @@ function setup() {
 }
 
 // initialize gamma lookup table
-var offs = -PI / 2
 for (var i = 0; i < 512; i++) {
-  gamma[i] = pow(wave(offs+(i / 512)),4);
+  gamma[i] = pow(wave(0.25+(i / 512)),4);
 }
 
 // initialize all waves
