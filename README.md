@@ -17,6 +17,7 @@ Patterns for Pixelblaze LED controller
  rate for a given number of objects.
 
 ## oasis.js
+
  Peaceful light dances on waves of green and blue.
  
  A quiet space to rest and reflect on what we've 
@@ -25,6 +26,8 @@ Patterns for Pixelblaze LED controller
  must still be begun and finished...
  
  Inspired by FASTLed's Pacifica effect
+ (updated to 1.0.1 on 11/27/2020 -- Better wavelength adjustment to strip size,
+  and more UI controls) 
 
 ## linesplash.js
 Creates "waves", drawn as a line on a 2D LED matrix, by randomly dropping objects

@@ -10,6 +10,7 @@
 
  Version  Author        Date        Comment
  1.0.0    JEM(ZRanger1) 10/20/2020 
+ 1.0.1    JEM(ZRanger1) 11/27/2020  Updated wavelength scaling method
 */ 
 
 // constant wave descriptor array indices.
@@ -18,11 +19,12 @@
 // difference here to matter.  Static numbers are a hair faster.
 var _speed = 0;        // base wave movement speed 
 var _direction = 1;    // direction - 0 = down, 1 = up
-var _divisor = 2;      // wavelength divisor (w = pixelCount/_divisor)
+var _divisor = 2;      // wavelength divisor 
 var _tSpeed = 3;       // speed timer;
 var _cSpeed = 4;       // current speed, based on UI slider
+var _cWlen = 5;        // current wavelength divisor
 
-var descriptorSize = 5;
+var descriptorSize = 6;
 
 // wave descriptors
 var layer1 = array(descriptorSize);
@@ -36,18 +38,19 @@ var gamma = array(512);
 // UI control variables
 export var speed = 1;
 export var whiteCaps = 1.46; 
-export var depth = 0.9;
+export var depth = 0.65;
+export var aura = 0.66667
+export var wavelenScale = 1
 
 var baseHue;  
 
 // UI functions
+export function sliderHue(v) {
+  aura = v
+}
+
 export function sliderSpeed(v) {
-  speed = 0.5 + ((1-v));
-  
-  layer1[_cSpeed] = layer1[_speed] * speed;
-  layer2[_cSpeed] = layer1[_speed] * speed;
-  layer3[_cSpeed] = layer1[_speed] * speed;
-  layer4[_cSpeed] = layer1[_speed] * speed;  
+  speed = 1.5+(4.5 * (1-v))
 }
 
 export function sliderWhitecaps(v) {
@@ -56,6 +59,11 @@ export function sliderWhitecaps(v) {
 
 export function sliderDepth(v) {
   depth = (1-v);
+}
+
+export function sliderWavelength(v) {
+  wavelenScale = 0.15+(2 * v);
+  setup();
 }
 
 // short functions that calculate brightness for a waveform moving
@@ -68,20 +76,20 @@ function waveForward(n) {
 }
 
 // calculate sum of all waves at a pixel.  Returns averaged and
-// gamma corrected value. TODO - need to find faster  n % 1 method.
+// gamma corrected value. 
 function gammatron(index) {
   var v,n;
-  n = ((index + layer1[3]) * layer1[2]) / pixelCount;
-  v = gamma[512 * (n % 1)];
+  n = ((index + layer1[3]) * layer1[5]) / pixelCount;
+  v = gamma[511 * (n % 1)];
   
-  n = ((index + layer2[3]) * layer2[2]) / pixelCount;
-  v += gamma[512 * (n % 1)];
+  n = ((index + layer2[3]) * layer2[5]) / pixelCount;
+  v += gamma[511 * (n % 1)];
 
-  n = ((index + layer3[3]) * layer3[2]) / pixelCount;
-  v += gamma[512 * (n % 1)];
+  n = ((index + layer3[3]) * layer3[5]) / pixelCount;
+  v += gamma[511 * (n % 1)];
 
-  n = ((index + layer4[3]) * layer4[2]) / pixelCount;
-  v += gamma[512 * (n % 1)];
+  n = ((index + layer4[3]) * layer4[5]) / pixelCount;
+  v += gamma[511 * (n % 1)];
   
   return v / 4;
 }  
@@ -99,35 +107,40 @@ function scaleSpeedToStrip(seconds) {
   return (seconds / 65.356) * (pixelCount / 150);
 }
 
-function initWave(w,speed,dir,divisor) {
-  w[_speed] = scaleSpeedToStrip(speed);
+function initWave(w,spd,dir,divisor) {
+  w[_speed] = scaleSpeedToStrip(spd * speed);
   w[_direction] = (dir) ? waveForward : waveReverse;
-  w[_divisor] = divisor;
+  w[_divisor] = divisor * wavelenScale;
   w[_cSpeed] = w[_speed];
+  w[_cWlen] = w[_divisor];
 }
 
-function setup() {
-// initialize gamma lookup table
-  for (var i = 0; i < 512; i++) {
-    gamma[i] = pow(wave(i / 512),4);
-  }
-  
 // configure wavelengths and speeds  
-  initWave(layer1,10, 1, 2);
-  initWave(layer2,6,  0, 2);
-  initWave(layer3,15, 1, 1);
-  initWave(layer4,22, 0, 4);  
+function setup() {
+  initWave(layer1,10, 1, 21);
+  initWave(layer2,6,  1, 9);
+  initWave(layer3,15, 0, 11);
+  initWave(layer4,22, 0, 5);  
 }
 
+// initialize gamma lookup table
+for (var i = 0; i < 512; i++) {
+  gamma[i] = pow(wave(i / 512),4);
+}
+
+// initialize all waves
 setup();
 
 export function beforeRender(delta) {
+    var t = triangle(time(0.3))
+
     layer1[3] = pixelCount * layer1[1](layer1[4]); 
     layer2[3] = pixelCount * layer2[1](layer2[4]);
     layer3[3] = pixelCount * layer3[1](layer3[4]);
-    layer4[3] = pixelCount * layer4[1](layer4[4]);   
-    
-    baseHue = 0.6667 + (0.02 * wave(time(0.3)));
+    layer4[3] = pixelCount * layer4[1](layer4[4]); 
+    layer4[5] = layer4[2] * (0.9 + ( t * 0.2))    
+
+    baseHue = aura + (0.02 * t);
 }
 
 export function render(index) {
