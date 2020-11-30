@@ -11,6 +11,7 @@
  Version  Author        Date        Comment
  1.0.0    JEM(ZRanger1) 10/20/2020 
  1.0.1    JEM(ZRanger1) 11/27/2020  Updated wavelength scaling method
+ 1.0.2    JEM(ZRanger1) 11/30/2020  Fixed phase offset bug
 */ 
 
 // constant wave descriptor array indices.
@@ -62,7 +63,7 @@ export function sliderDepth(v) {
 }
 
 export function sliderWavelength(v) {
-  wavelenScale = 0.15+(2 * v);
+  wavelenScale = 0.15+(2 * (1-v));
   setup();
 }
 
@@ -124,8 +125,9 @@ function setup() {
 }
 
 // initialize gamma lookup table
+var offs = -PI / 2
 for (var i = 0; i < 512; i++) {
-  gamma[i] = pow(wave(i / 512),4);
+  gamma[i] = pow(wave(offs+(i / 512)),4);
 }
 
 // initialize all waves
