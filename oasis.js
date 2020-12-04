@@ -81,7 +81,7 @@ function waveForward(n) {
 function gammatron(index) {
   var v,n;
   n = ((index + layer1[3]) * layer1[5]) / pixelCount;
-  v = gamma[511 * (n % 1)];
+  v = gamma[511 * abs(n % 1)];
   
   n = ((index + layer2[3]) * layer2[5]) / pixelCount;
   v += gamma[511 * (n % 1)];
