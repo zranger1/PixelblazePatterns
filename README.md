@@ -1,6 +1,12 @@
 # PixelblazePatterns
 Patterns for Pixelblaze LED controller
 
+## mandelbrot2D.js
+Displays an animated view into the Mandelbrot set on a 2D display.
+This is very much a work-in-progress.  I'll be optimizing and 
+improving for a while, but it's reached the point where it's fun
+to watch, so here it is! 
+
 ## bouncer3D.js
  Says "3D", but works on both 2D and 3D displays!
 
