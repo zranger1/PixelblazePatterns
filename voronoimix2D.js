@@ -24,7 +24,7 @@ var distance = array(numModes);
 // Comments in the actual functions explain how each method works.
 // Here are details on the draw modes I think work best w/each method.
 distance[0] = euclidean;    // all modes are good, but I like 3 and 5
-distance[1] = wavedistance; // try draw modes 1 and 6
+distance[1] = wavedistance; // try draw modes 2 and 5
 distance[2] = deviation;    // try draw modes 2 and 5
 distance[3] = chebyshev;    // draw modes 4 & 5 are interesting
 distance[4] = eggcrate;     // recommend draw mode 4
