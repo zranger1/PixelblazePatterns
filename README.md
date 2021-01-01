@@ -1,6 +1,11 @@
 # PixelblazePatterns
 Patterns for Pixelblaze LED controller
 
+## voronoimix2D.js
+Draws a bunch of colorful, animated Voronoi distance related patterns.
+Lots of UI controls -- this one is an experimental testbed, meant for
+exploration and play.   
+
 ## mandelbrot2D.js
 Displays an animated view into the Mandelbrot set on a 2D display.
 This is very much a work-in-progress.  I'll be optimizing and 
