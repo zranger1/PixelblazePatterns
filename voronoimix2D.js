@@ -14,10 +14,11 @@
 
  Version  Author        Date        Comment
  1.0.0    JEM(ZRanger1) 12/31/2020  MIT License
+ 1.0.1    "             1/1/2021    Smooth slider operation, bug fixes
 */ 
 
 // array of pointers to distance calculating functions
-var numModes = 6;
+var numModes = 7;
 var distance = array(numModes);
 
 // Distance methods - each uses a different algorithm for calculating distance
@@ -25,10 +26,11 @@ var distance = array(numModes);
 // Here are details on the draw modes I think work best w/each method.
 distance[0] = euclidean;    // all modes are good, but I like 3 and 5
 distance[1] = wavedistance; // try draw modes 2 and 5
-distance[2] = deviation;    // try draw modes 2 and 5
+distance[2] = deviation;    // draw modes 2 and 5 again
 distance[3] = chebyshev;    // draw modes 4 & 5 are interesting
 distance[4] = eggcrate;     // recommend draw mode 4
-distance[5] = manhattan;    // recommend draw mode 2
+distance[5] = manhattan;    // draw modes 4 and 5
+distance[6] = squarewaves;  // draw modes 1 and 5
 
 // array of pointers to pixel drawing functions with varying levels
 // of color and brightness manipulation.  Note that not all 
@@ -50,13 +52,18 @@ var Points = array(maxPoints);
 
 // current settings
 export var numPoints = 5;
-export var speed = 0.075;
+export var speed = 0.035;
 export var drawMode = 0;
 export var distMethod = 0;
 
 // UI
 export function sliderNumberOfPoints(v) {
-  numPoints = floor(1 + (v * (maxPoints - 1)));
+  var n;
+  n = floor(1 + (v * (maxPoints - 1)));
+  if (n != numPoints) {
+    numPoints = n;
+    initPoints();
+  }
 }
 
 export function sliderDistanceMethod(v) {
@@ -69,7 +76,6 @@ export function sliderDrawingMode(v) {
 
 export function sliderSpeed(v) {
   speed = 0.15 * v;
-  initPoints();
 }
 
 // create vector with a random position, direction, speed and color. 
@@ -85,8 +91,8 @@ function initPoints() {
     b[0] = random(1);       // x position 
     b[1] = random(1);       // y position
 
-    b[2] = random(speed);   // x velocity
-    b[3] = random(speed);   // y velocity
+    b[2] = random(1);   // x velocity
+    b[3] = random(1);   // y velocity
 
     b[4] = h + i/numPoints; // hue
   }
@@ -107,8 +113,8 @@ function bounce() {
     var b = Points[i];
     
 // move point according to velocity component of its vector 
-    b[0] += b[2];
-    b[1] += b[3];
+    b[0] += b[2] * speed;
+    b[1] += b[3] * speed;
 
 // bounce off walls by flipping vector element sign when we hit.
 // If we hit a wall, we exit early, trading precision in
@@ -146,12 +152,18 @@ function deviation(x,y) {
 
 // manhattan distance -- distance with no diagonals
 function manhattan(x,y) {
-    return abs(x+y);
+    return abs(x)+abs(y);
 }
 
 // feed dx & dy into an oddly scaled eggcrate surface generator -- crazy!
 function eggcrate(x,y) {
     return 1-(0.1*(cos(x * PI2) + sin (y * PI2)))
+}
+
+// square wave filter over manhattan distance makes interesting
+// "city block" patterns.
+function squarewaves(x,y) {
+    return square(manhattan(x,y),.75);
 }
 
 // render hue with fixed sat and bri
