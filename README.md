@@ -1,6 +1,21 @@
 # PixelblazePatterns
 Patterns for Pixelblaze LED controller
 
+## multisegmentforautomation.js
+"Industrial Strength" version of the multisegment pattern that only works
+with home automation controllers. All setup and control is done via the 
+websockets interface. There is no Web UI.  **If you have a home automation
+system that supports it, like the Hubitat Elevation, this is the multisegment
+pattern you want.**  See the setup guide - MULTISEG_HA.md - for full instructions
+and lists of settings and effects.
+
+## multisegmentdemo.js
+Demonstration/testbed for the multisegment pattern, with Pixelblaze Web UI
+controls.  If you don't have a home automation system and/or just want
+to see what the multisegment pattern can do, this is the one to try! Again,
+See the setup guide - MULTISEG_HA.md - for full instructions and lists of
+settings and effects.
+
 ## voronoimix2D.js
 Draws a bunch of colorful, animated Voronoi distance related patterns.
 Lots of UI controls -- this one is an experimental testbed, meant for
@@ -101,17 +116,7 @@ setup.  So as of v1.0.2, there is a variable in the pattern that allows you to c
 disable the sliders once you've got things set up.  It's ```useSliderUI``` around line
 80.  Set it to 0 to disable sliders, to 1 to enable them.
 
-If you are using ```<n>``` segments, the arrays will be named ```z_0 - z_<n-1>```. The number 
-of segments is also exported to json in the variable ```__n_segments```.  Checking for this
-variable with ```getVars``` is one way for an external program to reliably determine that 
-the multisegment pattern is running on the Pixelblaze.  The pattern code has a description
-of the layout of each array.
 
-Multisegment comes configured for four segments, but there is no absolute limit to the number
-of segments you can run. To add segments, edit the code to allocate more ```z_<n>``` arrays,
-add them to ```segTable``` in the function ```initialize()``` and update the ```__n_segments``` 
-variable.  That's it... everything else will just work, though each segment adds a little 
-additional overhead.  I'd guess 8 to 10 segments to be the practical limit.
 
 Twelve effects are built in.  They are:
 
@@ -168,3 +173,8 @@ with illusory white created by the eye averaging at high frame rate.
 the red part and the blue part on alternate frames.  There actually 
 is no white in the pattern at all. Super cool if your strip is running 
 around 120 fps or above.  It's a chaotic, blinking mess otherwise.
+
+# Donation
+If this project saves you time and effort, please consider donating to help support further development.  Every donut or cup of coffee helps!  :-)
+
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/donate/?hosted_button_id=YM9DKUT5V34G8)
