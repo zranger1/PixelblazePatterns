@@ -6,14 +6,15 @@ Patterns for Pixelblaze LED controller
 with home automation controllers. All setup and control is done via the 
 websockets interface. There is no Web UI.  **If you have a home automation
 system that supports it, like the Hubitat Elevation, this is the multisegment
-pattern you want.**  See the setup guide - MULTISEG_HA.md - for full instructions
+pattern you want.**  See the setup guide, [MULTISEG_HA.md](https://github.com/zranger1/PixelblazePatterns/blob/master/MULTISEG_HA.md) for full instructions
 and lists of settings and effects.
 
 ## multisegmentdemo.js
 Demonstration/testbed for the multisegment pattern, with Pixelblaze Web UI
 controls.  If you don't have a home automation system and/or just want
 to see what the multisegment pattern can do, this is the one to try! Again,
-See the setup guide - MULTISEG_HA.md - for full instructions and lists of
+See the setup guide, [MULTISEG_HA.md](https://github.com/zranger1/PixelblazePatterns/blob/master/MULTISEG_HA.md)
+for full instructions and lists of
 settings and effects.
 
 ## voronoimix2D.js

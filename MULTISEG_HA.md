@@ -6,8 +6,9 @@ control their speed.
 ## Setup for Hubitat Elevation
  - Install the Pixelblaze device handler to your Hubitat and create a Hub device for it
  - Confirm that you're able to connect and control your Pixelblaze from the Hub.
- - Copy multisegmentforautomation.js to your Pixelblaze, either by pasting the code from this repository into the Web UI's editor, or by
-downloading and importing the .epe version from the hubitatpixelblazedriver repository.
+ - Copy [multisegmentforautomation.js](https://github.com/zranger1/PixelblazePatterns/blob/master/multisegmentforautomation.js) to your Pixelblaze,
+either by pasting the code from my [PixelblazePatterns repository](https://github.com/zranger1/PixelblazePatterns) into the Web UI's editor, or by
+downloading and importing **Multisegment for Automation.epe** from the [hubitatpixelblazedriver repository](https://github.com/zranger1/hubitatpixelblazedriver) .
 
 Once the pattern is saved on your Pixelblaze, you're ready to configure segments. If everything is working, you will see... nothing.  All 
 LEDs will be off at this point.
