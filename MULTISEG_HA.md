@@ -1,4 +1,6 @@
-# Setting up and Using the Multisegment for Automation pattern
+# Setting up and Using the "Multisegment" pattern
+(Applies to both the "Multisegment For Automation" and "Multisegment Demo" patterns.)
+
 This pattern allows you to divide an LED strip into up to 12 independently
 controllable segments.  Each segment acts as an independent RGB color bulb. 
 You can control on/off state, color and brightness, and size. You can also set per-segment effects and
