@@ -334,7 +334,7 @@ function preGlitter(z,a,delta) {
 }
 
 function renderGlitter(z,a,index) {
-  b = pRandom(GetVar(z,1)) * index
+  b = pRandom(GetVar(z,1)* index)
   hsv(0,1-(b*0.03),b*b*b);
 }
 
