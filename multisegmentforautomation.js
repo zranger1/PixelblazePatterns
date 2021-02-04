@@ -9,11 +9,12 @@
  
  Version  Author        Date        Comment
  2.0.0    JEM           02/02/2021  v2 release
+ 2.0.1    JEM           02/03/2021  fixed __state/__switch bug
 */
 
 // CONSTANTS 
 // field indices for segment control array
-var __state = 0;         // on/off state
+var __switch = 0;         // on/off state
 var __hue = 1;           // hue (0-1 fixed point)
 var __sat = 2;           // saturation (0-1 fixed point)
 var __bri = 3;           // brightness (0-1 fixed point)
@@ -138,7 +139,7 @@ function SetSegHSB(z,h,s,b) {
 
 // set on/off state of specified zone
 function SetSegState(z, state) {
-	segTable[z][__state] = state;
+	segTable[z][__switch] = state;
 }
 
 // set special effect for zone
@@ -499,7 +500,7 @@ export function beforeRender(delta) {
     
     segStart[i] = start;
     start += a[__size];   
-    segEnabled[i] = a[__state] && (segStart[i] < pixelCount) && (a[__size] > 0);
+    segEnabled[i] = a[__switch] && (segStart[i] < pixelCount) && (a[__size] > 0);
     segBri[i] = a[__bri] * fadeLevel;
 
     if (segEnabled[i]) segPreRender[a[__effect]](i,a,delta);
