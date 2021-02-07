@@ -7,9 +7,10 @@
  This version of the pattern is made to be controlled via websockets, so
  it does not support the Pixelblaze Web UI. 
  
- Version  Author        Date        Comment
- 2.0.0    JEM           02/02/2021  v2 release
- 2.0.1    JEM           02/03/2021  fixed __state/__switch bug
+ Version  Author    Date        Comment
+ 2.0.0    JEM       02/02/2021  v2 release
+ 2.0.1    JEM       02/03/2021  fixed __state/__switch bug
+ 2.0.2    "         02/07/2021  fix unable to set color in glitter effect 
 */
 
 // CONSTANTS 
@@ -247,7 +248,7 @@ function preGlitter(z,a,delta) {
 
 function renderGlitter(z,a,index) {
   b = pRandom(GetVar(z,1) * index) 
-  hsv(0,1-(b*0.03),b*b*b);
+  hsv(a[__hue],1-(b*0.03),b*b*b);
 }
 
 // EFFECT: rainbow bounce 

@@ -14,8 +14,9 @@
  you can flip the "Enable Web UI" switch to 0 "off". The Web controls, if 
  enabled, can interact in strange ways with home automation)
 
- Version  Author        Date        Comment
- 2.0.0x   JEM           02/02/2021  v2 release
+ Version  Author    Date        Comment
+ 2.0.0x   JEM       02/02/2021  v2 release
+ 2.0.1x   "         02/07/2021  fix unable to set color in glitter effect
 */
 
 // CONSTANTS 
@@ -335,7 +336,7 @@ function preGlitter(z,a,delta) {
 
 function renderGlitter(z,a,index) {
   b = pRandom(GetVar(z,1)* index)
-  hsv(0,1-(b*0.03),b*b*b);
+  hsv(a[__hue],1-(b*0.03),b*b*b);
 }
 
 // EFFECT: rainbow bounce 
