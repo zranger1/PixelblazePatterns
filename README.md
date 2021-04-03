@@ -1,6 +1,10 @@
 # PixelblazePatterns
 Patterns for Pixelblaze LED controller
 
+## nbodygravity2D.js
+ A 2D n-body gravity simulator. As you'd expect, large numbers of particles at high gravity tend to
+ collapse and merge.  Lower the gravity a bit, and they'll fly free again.
+ 
 ## multisegmentforautomation.js
 "Industrial Strength" version of the multisegment pattern that only works
 with home automation controllers. All setup and control is done via the 
@@ -20,7 +24,12 @@ settings and effects.
 ## voronoimix2D.js
 Draws a bunch of colorful, animated Voronoi distance related patterns.
 Lots of UI controls -- this one is an experimental testbed, meant for
-exploration and play.   
+exploration and play.
+
+## rule30flasher.js
+A computational toy.  Demonstrates how to use the center column of a 
+cellular automaton running Wolfram's Rule 30 to generate a high
+quality stream of random bits.  Makes pretty blinking lights too.   
 
 ## mandelbrot2D.js
 Displays an animated view into the Mandelbrot set on a 2D display.
