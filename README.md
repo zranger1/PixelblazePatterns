@@ -2,15 +2,26 @@
 Patterns for Pixelblaze LED controller
 
 ## raindrops2d.js
- Top down view of rain falling on a pool.  You control the rain intensity
- via Web UI.  Very relaxing, best viewed from a few feet away from your
- display.  
+Top down view of rain falling on a pool.  You control the rain intensity
+via Web UI.  Very relaxing to watch, best viewed from a few feet away from your
+display.  
 
- Requires a 2D LED array and appropriate (2D) pixel mapper.
+Requires a 2D LED array and appropriate (2D) pixel mapper.
+ 
+## sunrise2d.js
+2D sunrise/solar activity simulator - an animated sun rises and
+shines.  Plenty of surface activity, plus dynamic, particle-system
+based corona and solar flares. 
+
+Move the UI slider to see the sunrise again!
+
+Requires a 2D LED array and appropriate (2D) pixel mapper.
  
 ## nbodygravity2D.js
- A 2D n-body gravity simulator. As you'd expect, large numbers of particles at high gravity tend to
- collapse and merge.  Lower the gravity a bit, and they'll fly free again.
+A 2D n-body gravity simulator. As you'd expect, large numbers of particles at high gravity tend to
+collapse and merge.  Lower the gravity a bit, and they'll fly free again.
+ 
+Requires a 2D LED array and appropriate (2D) pixel mapper.
  
 ## multisegmentforautomation.js
 "Industrial Strength" version of the multisegment pattern that only works
