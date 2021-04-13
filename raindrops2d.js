@@ -101,7 +101,7 @@ export function beforeRender(delta) {
   
   // drop calculations are limited to 33/sec because it
   // looks about right...
-  if (frameTimer > 30) {
+  if (frameTimer > 33) {
     doRipples();  
     frameTimer = 0;
   }
