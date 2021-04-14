@@ -129,37 +129,6 @@ odd color changes... Will remind you why LEDs are better!  This is part of my co
 mirror lighting system, which reproduces the colors of several different light sources.  It um, sorta snuck in there, and
 insists on running every April 1.
 
-## multisegment.js
-Allows you to subdivide an LED strip into multiple, independently
-controllable segments.  For each segment, you can control on/off state,
-color and brightness, and size.  You can also set per-segment effects and
-control their speed. 
-
-The slider UI allows you to play with all the settings.  You can also control
-each segment via json from an external progam -- it exports an array per segment
-with each segment's current settings.
-
-**New:** If you're using multisegment with a home automation system, the sliders may interfere with
-setup.  So as of v1.0.2, there is a variable in the pattern that allows you to completely
-disable the sliders once you've got things set up.  It's ```useSliderUI``` around line
-80.  Set it to 0 to disable sliders, to 1 to enable them.
-
-
-
-Twelve effects are built in.  They are:
-
-0. **Default** - render the currently selected solid color
-1. **Glitter** - fast random sparkles in the current color
-2. **Rainbow Bounce** - the default "New Pattern" effect.
-3. **KITT** - because KITT is essential. 
-4. **Breathe** - brightness slowly "breathes" up and down
-5. **Slow Color** - slowly changes hue
-6. **Snow** - Occasional icy "sparkles" over current color background.
-7. **Chaser Up** - light moves "up" from start of strip.
-8. **Chaser Down** - light moves "down" from end of strip.
-9. **Strobe** - hideous, but you never known when a rave may occur. Be prepared.
-10. **Random Wipe** - random color wipe
-11. **Springy Theater** - theater style chaser lights that also change distance.
 
 ## cellularautomata1d.js
 Renders elementary cellular automata as described by https://mathworld.wolfram.com/ElementaryCellularAutomaton.html
