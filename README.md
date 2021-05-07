@@ -1,6 +1,32 @@
 # PixelblazePatterns
 Patterns for Pixelblaze LED controller
 
+## cycliccellularautomata2d.js
+ Displays a cyclic cellular automaton, and a variant of the Greenberg-Hastings CCA: 
+ 
+ https://en.wikipedia.org/wiki/Greenberg%E2%80%93Hastings_cellular_automaton
+ 
+ This flavor of CA is used to model "excitable" systems -- a system that can 
+ activate, and support the passage of a wave of some sort, after which it
+ must "rest" for some period of time before another wave can pass.  
+ 
+ A forest fire is the canonical example of this kind of system...
+ 
+ Requires a 2D LED array and appropriate pixel mapper.
+ 
+ Cells are randomly initialized according to the current mode and parameter set.
+ Some initial condition sets may "fizzle" and die out.  If this occurs, the 
+ pattern will automatically re-initialize.
+ 
+ The default settings produce mostly "good" results, but this pattern rewards
+ experimentation and a bit of patient watching.  It can produce beautiful visuals
+ that would be near impossible to make any other way!
+ 
+## infinityflower.js
+Generates and displays a new flower species every couple of seconds. 
+
+Requires a 2D LED array and appropriate pixel mapper.
+ 
 ## raindrops2d.js
 Top down view of rain falling on a pool.  You control the rain intensity
 via Web UI.  Very relaxing to watch, best viewed from a few feet away from your
@@ -21,6 +47,11 @@ Requires a 2D LED array and appropriate (2D) pixel mapper.
 A 2D n-body gravity simulator. As you'd expect, large numbers of particles at high gravity tend to
 collapse and merge.  Lower the gravity a bit, and they'll fly free again.
  
+Requires a 2D LED array and appropriate (2D) pixel mapper.
+
+## conwaysllife2d.js
+Conway's classic "Game of Life" cellular automaton.  
+
 Requires a 2D LED array and appropriate (2D) pixel mapper.
  
 ## multisegmentforautomation.js
