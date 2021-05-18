@@ -6,6 +6,8 @@ Patterns for Pixelblaze LED controller
 Realistic 2D Fire effect, with "enhanced" dragon's breath mode. Looks best with a diffuser,
 but quite in any case. Uses a convolution algorithm inspired by the low-res fire in the
 prehistoric PSX port of DOOM!   See code comments for details.
+
+Video: https://youtu.be/_LuZJvVMEqE
  
 Requires a 2D display and appropriate mapping function.
 
@@ -20,18 +22,24 @@ Requires a 2D display and appropriate mapping function.
  
  A forest fire is the canonical example of this kind of system...
  
- Requires a 2D LED array and appropriate pixel mapper.
- 
+ Video: https://youtu.be/VIBBHW_6eio
+  
  Cells are randomly initialized according to the current mode and parameter set.
  Some initial condition sets may "fizzle" and die out.  If this occurs, the 
  pattern will automatically re-initialize.
  
  The default settings produce mostly "good" results, but this pattern rewards
  experimentation and a bit of patient watching.  It can produce beautiful visuals
- that would be near impossible to make any other way!
+ that would be near impossible to make any other way! 
  
+ 
+ Requires a 2D LED array and appropriate pixel mapper.
+ 
+
 ## infinityflower.js
 Generates and displays a new flower species every couple of seconds. 
+
+Video: https://youtu.be/7lAhRjhJCmc
 
 Requires a 2D LED array and appropriate pixel mapper.
  
@@ -39,6 +47,8 @@ Requires a 2D LED array and appropriate pixel mapper.
 Top down view of rain falling on a pool.  You control the rain intensity
 via Web UI.  Very relaxing to watch, best viewed from a few feet away from your
 display.  
+
+Video: https://youtu.be/Wl4LOqAQ3ro
 
 Requires a 2D LED array and appropriate (2D) pixel mapper.
  
@@ -78,10 +88,14 @@ See the setup guide, [MULTISEG_HA.md](https://github.com/zranger1/PixelblazePatt
 for full instructions and lists of
 settings and effects.
 
+Video: https://youtu.be/4-5qdCpFFfE
+
 ## voronoimix2D.js
 Draws a bunch of colorful, animated Voronoi distance related patterns.
 Lots of UI controls -- this one is an experimental testbed, meant for
 exploration and play.
+
+Video: https://youtu.be/EozPJG5OvQ8
 
 ## rule30flasher.js
 A computational toy.  Demonstrates how to use the center column of a 
@@ -93,6 +107,8 @@ Displays an animated view into the Mandelbrot set on a 2D display.
 This is very much a work-in-progress.  I'll be optimizing and 
 improving for a while, but it's reached the point where it's fun
 to watch, so here it is! 
+
+Video: https://youtu.be/V2dlac4WSic
 
 ## bouncer3D.js
  Says "3D", but works on both 2D and 3D displays!
@@ -120,8 +136,10 @@ to watch, so here it is!
  
  Inspired by FASTLed's Pacifica effect
  
- (updated to 1.0.2 on 11/30/2020 --Better wavelength adjustment to strip size,
-  and additional UI controls) 
+ Video: https://youtu.be/CAHAIPlc2Gs
+ 
+(updated to 1.0.2 on 11/30/2020 --Better wavelength adjustment to strip size,
+and additional UI controls) 
 
 ## linesplash.js
 Creates "waves", drawn as a line on a 2D LED matrix, by randomly dropping objects
