@@ -80,6 +80,8 @@ system that supports it, like the Hubitat Elevation, this is the multisegment
 pattern you want.**  See the setup guide, [MULTISEG_HA.md](https://github.com/zranger1/PixelblazePatterns/blob/master/MULTISEG_HA.md) for full instructions
 and lists of settings and effects.
 
+Video: https://youtu.be/4-5qdCpFFfE
+
 ## multisegmentdemo.js
 Demonstration/testbed for the multisegment pattern, with Pixelblaze Web UI
 controls.  If you don't have a home automation system and/or just want
@@ -87,8 +89,6 @@ to see what the multisegment pattern can do, this is the one to try! Again,
 See the setup guide, [MULTISEG_HA.md](https://github.com/zranger1/PixelblazePatterns/blob/master/MULTISEG_HA.md)
 for full instructions and lists of
 settings and effects.
-
-Video: https://youtu.be/4-5qdCpFFfE
 
 ## voronoimix2D.js
 Draws a bunch of colorful, animated Voronoi distance related patterns.
