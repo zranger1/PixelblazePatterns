@@ -1,6 +1,14 @@
 # PixelblazePatterns
 Patterns for Pixelblaze LED controller
 
+## doomfire2d.js
+
+Realistic 2D Fire effect, with "enhanced" dragon's breath mode. Looks best with a diffuser,
+but quite in any case. Uses a convolution algorithm inspired by the low-res fire in the
+prehistoric PSX port of DOOM!   See code comments for details.
+ 
+Requires a 2D display and appropriate mapping function.
+
 ## cycliccellularautomata2d.js
  Displays a cyclic cellular automaton, and a variant of the Greenberg-Hastings CCA: 
  
