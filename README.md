@@ -124,6 +124,8 @@ Video: https://youtu.be/V2dlac4WSic
  with number of objects. But it can go back up as you increase object size.
  There's some fun to be had playing with these parameters to maximize frame
  rate for a given number of objects.
+ 
+ Video (2D): https://youtu.be/tjvoOpJCxtQ
 
 ## oasis.js
 
