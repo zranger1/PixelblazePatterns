@@ -1,4 +1,4 @@
-/* DOOM Fire 2D
+/* DOOM Fire
 
  2D Fire effect, with "enhanced" dragon's breath mode. The method is inspired by the low-res 
  fire in the prehistoric PSX port of DOOM!  It uses no Perlin or other gradient, value or
@@ -10,7 +10,7 @@
  MIT License
  
  Version  Author        Date      
- 1.0.0    JEM(ZRanger1) 05/13/2021
+ 1.0.1    JEM(ZRanger1) 07/19/2021  Better wind algorithm
 */ 
 
 // display size - enter the dimensions of your display here
@@ -35,9 +35,10 @@ var baseBri = 0.6;
 var maxCooling = 0.34;        // how quickly flames die down  
 var dragonMode = 0;           // 0: plain old fire, 1: dragon's breath
 var breathTimer;              // dragon's breath cycle time
-var wind = 0;                 // variable indicating direction of wind
+var wind = 0.50;              // probability of wind direction change. 0 == no wind
+var windDirection = 0;        // current wind direction
 var frameTimer = 9999;        // accumulator for simulation timer
-export var simulationSpeed = 60;     // min milliseconds between simulation frames
+var simulationSpeed = 60;     // min milliseconds between simulation frames
 var perturb = perturbNormal;  // pointer to fn that plays with fire
 
 // UI
@@ -47,11 +48,20 @@ export function hsvPickerHue(h,s,v) {
 }
 
 export function sliderFlameHeight(v) {
-  maxCooling = 0.25+((1-v) * 0.2)
+  v = (1-v); v = v * v;
+  maxCooling = max(4 * v,0.1);
 }
 
+export function sliderWind(v) {
+  wind = (v * v) / 2;
+  if (wind == 0) windDirection = 0;
+}
+
+var lastDragonMode = dragonMode;
 export function sliderDragonMode(v) {
   dragonMode = (v > 0.5);
+  if (dragonMode == lastDragonMode) return;
+  lastDragonMode = dragonMode;
   
   if (dragonMode) {
     perturb = perturbDragonBreath;
@@ -98,14 +108,6 @@ function perturbNormal() {
   }
 }
 
-// change wind direction occasionally, always with a short reset to
-// zero wind between changes, to give us the look of periodic gusts.
-function getWindDirection(w) {
-  if (random(1) < 0.15) {
-    return (w != 0) ? 0 : random(3) - 1;
-  }
-}
-
 function swapBuffers()  {
   var tmp = pb1; pb1 = pb2; pb2 = tmp;
 }
@@ -113,21 +115,20 @@ function swapBuffers()  {
 // Fire is hottest at the bottom, and "cools" as it rises. Each pixel
 // calculates it's value based on the one below it, with allowance for
 // the current wind direction.
-export var c;
 function doFire() {
   swapBuffers();
   
-  wind = getWindDirection(wind);
+  if (wind > 0) windDirection = (random(1) < wind) ? floor(random(3)) - 1 : windDirection;
 
   for (var x = 1; x < lastCol; x++) {
-    // weight wind effect -- high towards outside, low at center.
-    c = x + (1-abs((x / lastCol) - 0.5)) * wind;
-    
+
     // cooling effect decreases with height, so very hot particles
     // that don't cool early on get "carried" farther.  It just looks better.
-    for (var y = 1; y < lastRow; y++) {
-      var r = ((maxCooling * random(1)) * (y/lastRow));
-      pb2[x][y] = max(0,pb1[c][y+1] - r);
+   for (var y = 1; y < lastRow; y++) {
+      var r = (maxCooling * random(1-(y/lastRow)));
+      var windFx = (abs((lastRow / 2) - y) / lastRow);
+      windFx = x + (random(1) < 0.5-windFx) * windDirection;
+      pb2[x][y] = max(0,pb1[windFx][y+1] - r);
     }
   }  
 }
@@ -141,6 +142,7 @@ export function beforeRender(delta) {
 
   if (frameTimer > simulationSpeed) {
     breathTimer = wave(time(0.1));    
+    
     doFire();  
     perturb();
 
