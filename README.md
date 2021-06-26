@@ -1,7 +1,45 @@
 # PixelblazePatterns
 Patterns for Pixelblaze LED controller
 
+## snowflakenova2d.js
+ Started life as a snowflake generator, but turned into more
+ of a psychedelic snowflake kaleidoscope thing...
+ 
+ Simulates the "fold and cut random holes with scissors" snowflake 
+ making method, which works in a strange and interesting way
+ at the low spatial resolution of LED displays.
+ 
+ Requires a 2D display and appropriate mapping function. Best
+ with some sort of diffuser over the display.
+
+## icefloes2d.js
+ A river filled with floating ice!  Uses Voronoi distance to simulate
+ blocks of ice drifting and turning in the current. 
+ 
+ Requires a 2D display and appropriate mapping function.
+ 
+## timeflies2d.js
+ "Time flies like an arrow.  Fruit flies like a banana..."
+Many small bugs with flapping wings -- food for Jeff's excellent Snake 2D:
+ 
+https://forum.electromage.com/t/task-8-serpentine-square/1088/7
+ 
+Uses a similar additive wave noise generator to control movement.
+Requires a 2D display and appropriate mapping function.  
+
+## rosecurve2d.js
+ Interactive "rose" or rhodonea curve display.
+
+https://en.wikipedia.org/wiki/Rose_(mathematics)
+
+ N and D sliders control angular frequency.  The wikipedia
+ article has a figure illustrating the many types of curves that
+ these settings will produce.
+
+ Requires a 2D LED array and appropriate pixel mapper.
+
 ## doomfire2d.js
+New:  Updated to v1.0.1 w/more flame, better wind.
 
 Realistic 2D Fire effect, with "enhanced" dragon's breath mode. Looks best with a diffuser,
 but quite in any case. Uses a convolution algorithm inspired by the low-res fire in the
