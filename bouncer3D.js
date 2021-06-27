@@ -1,13 +1,15 @@
 /*
  Bouncer 2D/3D
  
- Bounces (up to 20) balls objects around a 2D or 3D display. 
- Use sliders to set "ball" count, size and speed.  
+ Bounces (up to 20) objects - spheres or square "tiles" - around a 2D or 3D display. 
+ Use sliders to set object count, size and speed.  
  
  Requires a 2D or 3D LED array and appropriate pixel mapper.
  
- Version  Author        Date        Comment
- 1.0.1    JEM(ZRanger1) 11/12/2020 
+ MIT LICENSE
+ 
+ Version  Author        Date       
+ 1.0.2    JEM(ZRanger1) 05/20/2021 
 */ 
 
 // Global Variables
@@ -16,6 +18,7 @@ export var numBalls = 6;
 export var ballSize = 0.06;
 export var speed = 0.075;
 export var ballSize3D = ballSize * 4 ;
+var ballShape = 0;  // 0 - round, 1 = square
 
 // array of ball vectors
 var balls = array(maxBalls);
@@ -35,6 +38,10 @@ export function sliderSpeed(v) {
   initBalls();
 }
 
+export function sliderShape(v) {
+  ballShape = (v > 0.5);
+}
+
 // allocate memory for ball vectors
 function createBalls() {
   for (var i = 0; i < maxBalls; i++) {  
@@ -44,6 +51,7 @@ function createBalls() {
 
 // create ball vector with a random position, direction, speed, color
 function initBalls() {
+  var hue = random(1);
   for (var i = 0; i < numBalls; i++) {
     var b = balls[i];  
     
@@ -55,7 +63,8 @@ function initBalls() {
     b[4] = random(speed); // y vec
     b[5] = random(speed); // z vec   
     
-    b[6] = random(1);     // hue
+    b[6] = hue;
+    hue += 0.619033
   }
 }
 
@@ -82,6 +91,11 @@ function bounce() {
   }
 }
 
+// compute brightness and saturation of pixel on our sphere
+function drawBall2D(dx,dy,dz) {
+  
+}
+
 createBalls();
 initBalls();
 
@@ -98,10 +112,15 @@ export function render2D(index,x,y) {
   for (var i = 0; i < numBalls; i++) {
     if ((dx = abs(balls[i][0] - x)) > ballSize) continue;
     if ((dy = abs(balls[i][1] - y)) <= ballSize) { 
-      v = (dx + dy) / ballSize;  v = v * v;
-      s = v * 4; 
-      v = 1-v;
-      h = balls[i][6];
+      if (ballShape) {
+        v = 1;
+      }
+      else {
+        v = hypot(dx,dy) / ballSize;  v = v * v;
+        s = v * 6; 
+        v = 1-v;
+      }
+      h = balls[i][6];      
       break;
     }  
   }
@@ -111,16 +130,21 @@ export function render2D(index,x,y) {
 
 export function render3D(index,x,y,z) {
   var dx,dy,dz;  
+  var s = 1;  
   var v = 0;
-  var s = 1;
-  
+
   for (var i = 0; i < numBalls; i++) {
     if ((dx = abs(balls[i][0] - x)) > ballSize3D) continue;
     if ((dy = abs(balls[i][1] - y)) > ballSize3D) continue;
     if ((dz = abs(balls[i][2] - z)) <= ballSize3D) {
-      v = (dx + dy + dz) / ballSize3D;  v = v * v;
-      s = v * 4; 
-      v = 1-v;
+      if (ballShape) {
+        v = 1;
+      }
+      else {
+        v = (dx + dy + dz) / ballSize3D;  v = v * v;
+        s = v * 4; 
+        v = 1-v;
+      }
       h = balls[i][6];
       break;
     }
