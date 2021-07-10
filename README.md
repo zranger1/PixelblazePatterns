@@ -1,6 +1,17 @@
 # PixelblazePatterns
 Patterns for Pixelblaze LED controller
 
+## spinwheel2d.js
+ Colorful, flowerlike radial spinner.
+ Yet another example of the complex and unpredictible things
+ that result when you combine a few simple waveforms.
+
+## rgbplasma2d.js
+ Simple, brightly colored additive sine/cosine plasma with sliders
+ to control noise scale and density.  Built from a GLSL prototype
+ just to see if a Pixelblaze 3 can manage the trig mostly the same
+ way. Spoiler:  It can! 
+   
 ## snowflakenova2d.js
  Started life as a snowflake generator, but turned into more
  of a psychedelic snowflake kaleidoscope thing...
