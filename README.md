@@ -1,6 +1,14 @@
 # PixelblazePatterns
 Patterns for Pixelblaze LED controller
 
+## matrixgreenwaterfall.js
+Basic green "The Matrix"-style waterfall display adapted for 
+2D LED displays.
+
+Not a perfect reproduction but it looks good, and it's fast and
+lightweight enough to be usable as a background or a texture in
+another pattern.
+
 ## spinwheel2d.js
  Colorful, flowerlike radial spinner.
  Yet another example of the complex and unpredictible things
