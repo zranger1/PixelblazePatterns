@@ -61,7 +61,7 @@ https://en.wikipedia.org/wiki/Rose_(mathematics)
 New:  Updated to v1.0.1 w/more flame, better wind.
 
 Realistic 2D Fire effect, with "enhanced" dragon's breath mode. Looks best with a diffuser,
-but quite in any case. Uses a convolution algorithm inspired by the low-res fire in the
+but quite fiery in any case. Uses a convolution algorithm inspired by the low-res fire in the
 prehistoric PSX port of DOOM!   See code comments for details.
 
 Video: https://youtu.be/_LuZJvVMEqE
