@@ -9,10 +9,14 @@ Not a perfect reproduction but it looks good, and it's fast and
 lightweight enough to be usable as a background or a texture in
 another pattern.
 
+Video: https://youtu.be/pOs0UX_w7PI
+
 ## spinwheel2d.js
- Colorful, flowerlike radial spinner.
+ A fast, colorful, flowerlike radial spinner.
  Yet another example of the complex and unpredictible things
  that result when you combine a few simple waveforms.
+ 
+ Video: https://youtu.be/L-d-PPknVlM
 
 ## rgbplasma2d.js
  Simple, brightly colored additive sine/cosine plasma with sliders
