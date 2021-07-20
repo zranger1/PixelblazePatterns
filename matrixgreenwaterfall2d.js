@@ -5,19 +5,26 @@
   Not a perfect reproduction, but extremely lightweight and fast enough
   to be usable as a background or a texture in another pattern.
    
-   7/10/21 JEM(zranger1)
+   7/15/21 JEM(zranger1)
 */
 
 var speed = 20;
 var hue = 0.3333;
+var waveBase = (sqrt(pixelCount) / 2);
+
+// uncomment mod() function for pixelblaze 2
+//function mod(dividend, divisor) {
+//  var r = dividend % divisor;
+//  return (r > 0) != (divisor > 0) ? r + divisor : r;
+//}
 
 export function sliderSpeed(v) {
   speed = floor(50 * v);
 }
 
 export function beforeRender(delta) {
-  t1 = speed*time(.25)+0.02;
-  w = (pixelCount / 2) + (0.5*time(.3))
+  t1 = speed*(time(.25)+0.02);
+  w = waveBase + (0.5*time(.3))
 }
 
 export function render2D(index,x,y) {
