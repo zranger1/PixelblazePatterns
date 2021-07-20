@@ -9,6 +9,7 @@
 
 var t1,t2;
 var speed = 6;
+translate(-0.5,-0.5);
 
 export function beforeRender(delta) {
   t1 = time(.2) * (-PI * wave(time(0.1)));
@@ -16,7 +17,7 @@ export function beforeRender(delta) {
 }
 
 export function render2D(index,x,y) {
-  x = x- 0.5; y = y - 0.5;
+
   var arX = (atan2(x,y)+t1*30);
   var arY = (hypot(x,y)+t2);
   
@@ -26,6 +27,6 @@ export function render2D(index,x,y) {
   arX = frac(arX);
   arY = frac(arY);
   
-  var h = (.1/(arX*arX+arY*arY) * .1) * phi; 
+  var h = (.1/(arX*arX+arY*arY) * .19) * phi; 
   hsv(t1+(x*y)+h, 1-h, h);
 }
