@@ -5,21 +5,18 @@
  
  Requires a 2D display and appropriate mapping function.
 
- Version  Author        Date        Comment
- 1.0.0    JEM(ZRanger1) 6/17/2021   MIT License
+ Version  Author     Date        Comment
+ 1.0.1    ZRanger1   7/30/2021   Faster
 */ 
 
-// array of vectors for each point
-var crackWidth = 0.12;
-var maxPoints = 8;
-var Points = array(maxPoints);
-
+// animation control
 var frameTimer = 9999;
 var simulationSpeed = 60;  
 
-// current settings
+// array of vectors for each point
 var numPoints = 4;
-export var speed = 0.7;
+var Points = array(numPoints);
+export var speed = .575;
 
 // UI
 export function sliderSpeed(v) {
@@ -34,17 +31,15 @@ function initPoints() {
     b[0] = random(1);       // x position 
     b[1] = random(1);       // y position
 
-    b[2] = random(0.02) - 0.05;  // x velocity
-    b[3] = random(.02) - random(0.02);   // y velocity
-
-    b[4] = 0.55 // hue
+    b[2] = random(0.02) - 0.05;       // x velocity
+    b[3] = 0.015 * (random(1) - 0.5) ; // y velocity
   }
 }
 
 // allocate and initialize point descriptors
 function createPoints() {
-  for (var i = 0; i < maxPoints; i++) {  
-    Points[i] = array(5);
+  for (var i = 0; i < numPoints; i++) {  
+    Points[i] = array(4);
   }
   initPoints();
 }
@@ -79,8 +74,7 @@ createPoints();
 
 export function beforeRender(delta) {
   frameTimer += delta;
-  crackWidth = .08 + (.12 * triangle(time(.3)));
-  
+
   if (frameTimer > simulationSpeed) {
     doRiver(frameTimer);
     frameTimer = 0;
@@ -94,25 +88,21 @@ export function beforeRender(delta) {
 export function render2D(index,x,y) {
   var minDistance,i,r,h,v;
   
-  minDistance = 32765;   
+  minDistance = 1;   
 
   for (i = 0; i < numPoints; i++) {
     // calculate euclidean distance to nearest control point
     r = wrappedEuclid(abs(Points[i][0] - x),abs(Points[i][1] - y));
 
     if (r <= minDistance) {
-        // if distances are very similar, mark boundary pixels.
-      if (abs(r - minDistance) < crackWidth) {
-        h = 0.6667;  // tag pixel as a potential "crack"
-      } else {
-        h = Points[i][4];
-      }
+        // if distances are very similar, mark boundary pixels by coloring
+        // them dark blue.  
+      h = (abs(r - minDistance) < 0.12) ? 0.6667 : 0.55 + (r * .15);
       minDistance = r;
     }
   }
   
 // draw pixel  
     var bri = 1-minDistance; bri = bri*bri*bri;   
-    hsv(h,(h == 0.6667) ? 1 : bri,bri)
-
+    hsv(h,(h == 0.6667) ? 1 : 1.21-bri,bri)
 }

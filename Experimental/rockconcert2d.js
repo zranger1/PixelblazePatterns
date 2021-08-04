@@ -4,7 +4,7 @@ var verticalSpacing = 2.3;
 export var verticalSweep = 5;
 export var focus = 0.18;
 export var speed = 80;
-export var drive = 1.25;
+export var drive = 1.2;
 
 // set default colors
 var centerR = 0.1; var centerG = 0.7; var centerB = 0.12;
@@ -12,6 +12,7 @@ var edgeR = 0.34; var edgeG = .02; var edgeB = 0.98;
 
 translate(-0.5,-0.5);
 
+/*
 export function rgbPickerCenter(r,g,b) {
  centerR = r; centerG = g; centerB = b;  
 }
@@ -43,6 +44,7 @@ export function sliderSpeed(v) {
 export function sliderVerticalSweep(v) {
   verticalSweep = 1+(5*v);
 }
+*/
 
 export function beforeRender(delta) {
   t1 = time(.2) * speed;

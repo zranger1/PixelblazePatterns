@@ -1,17 +1,25 @@
-var cellScale = 3;  // sqrt of number of displayable cells
-
+// Worley cell noise generator 
+// CAREFUL - very CPU intensive.
+// Worley noise is widely used on high resolution displays to generate
+// voronoi-like distance fields while limiting the number of per-pixel
+// comparisons.
+// On LED displays though, the number of pixels is so small that it's 
+// actually faster to just generate the normal voronoi distance.
+//
+// I'm still looking ways to make this faster and more useful though!
+// 7/4/2021 ZRanger1
 
 export var tileX,tileY,posX,posY
 export var pX,pY;
 var diffX,diffY;
 export var minDist;
 
+var cellScale = 2;  // sqrt of number of displayable cells
 scale(cellScale,cellScale);
 
 export function beforeRender(delta) {
   t1 = time(0.1);
 }
-
 
 // 16 bit xorshift PRNG from 
 // http://www.retroprogramming.com/2017/07/xorshift-pseudorandom-numbers-in-z80.html
@@ -43,19 +51,19 @@ export function render2D(index,x,y) {
         rollSeed(yOffs + tileY); pY = roll();        
 
 			// Animate the point
-			  pX = triangle(t1 + pX);
-			  pY = triangle(t1 + pY);			  
+			  pX = triangle(t1 + pX) * 0.7;
+			  pY = triangle(-0.25+t1 + pY) * 0.7;			  
 
 			// Vector between the pixel and the point
 			  diffX = (xOffs + pX) - posX;
 			  diffY = (yOffs + pY) - posY;			  
 			  var dist = hypot(diffX,diffY);
 			  
-			  minDist = min(minDist,dist*minDist);
+			  minDist = min(minDist,dist);
       }
     }
 
     // Draw the min distance (distance field)
-    v = (minDist < 0.12) ? minDist: 0;
-    hsv(0.6667,.7, v)    
+    v = (minDist < 0.15) ? minDist: 0;
+    hsv(0.6667,0, v)    
 }
