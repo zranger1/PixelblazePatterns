@@ -95,11 +95,11 @@ function hexStar(x,y,r) {
 ```
 // interior distance on this is slightly weird. Still
 // looking for a reasonable fix.
-function cross(x,y,size) {
+function cross(x,y,size,armLength) {
   x = abs(x); y = abs(y);
   
   if (y > x) { tmp = x; x = y; y = tmp; }
-  qx = x - size; qy = y - size / 5;
+  qx = x - size; qy = y - armLength;
   k = max(qy,qx);
   if (k > 0) {
     wx = max(qx,0); wy = max(qy,0);
