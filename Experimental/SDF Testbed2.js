@@ -1,8 +1,12 @@
+// Signed Distance Function Testbed
+// Paste in your distance function and call it in render2D()
+
 // UI control variables
 export var objectSize = 0.4;
 export var lineWidth = 0.05;
 export var sides = 4;
 
+// Signed distance function goes here...
 function signum(a) {
   return (a > 0) - (a < 0)
 }
@@ -35,13 +39,16 @@ export function sliderSides(v) {
   sides = 3+floor(5*v);
 }
 
-translate(-0.5,-0.5);  
+translate(-0.5,-0.5); 
+
+// set up a timer for a little color shifting
 export function beforeRender(delta) {
-  ;
+  t1 = time(0.1);
 }
 
+// render object, color determined by distance from boundary
 export function render2D(index,x,y) {
   var d = nSidedPolygon(x,y,objectSize,sides);
-  hsv(0.3333, 0.6, (d <= lineWidth) * abs(d)/objectSize)
+  hsv(t1-(lineWidth-d), 1, (d <= lineWidth));
 }
 

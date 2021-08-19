@@ -5,8 +5,18 @@
 A signed distance function (SDF) is a function that returns the distance between a point and the boundary of the space
 described by the function.  The returned distance is positive if the point is outside the shape, zero if exactly on the boundary, and negative if inside the shape. This makes it possible to use SDFs to easily draw filled and unfilled shapes.
  
-Below are a set of distance functions for various 2D shapes, adapted for Pixelblaze. Most are ports of OpenGL shader code from https://iquilezles.org/www/articles/distfunctions/distfunctions.htm, which I highly recommend as a reference and an entry point into a fascinating set of advanced graphics techniques.
+Below are a set of distance functions for various 2D shapes, adapted for Pixelblaze. Most are ports of OpenGL shader code from
 
+https://iquilezles.org/www/articles/distfunctions/distfunctions.htm
+
+which I highly recommend as a reference and an entry point into a fascinating set of advanced graphics techniques.
+
+If you want to check out one of these functions or test one of your own, here's a simple pattern that 
+will let you evaluate a single SDF and render the result.
+
+[SDF Testbed](https://github.com/zranger1/PixelblazePatterns/blob/master/Experimental/SDF%20Testbed2.js)
+
+It comes set up with the n-sided polygon SDF so you can see how it works.  To run your own function, just paste it in and call it in render2D().
 
 ## Utility functions
 Required by one or more of the signed distance functions.
