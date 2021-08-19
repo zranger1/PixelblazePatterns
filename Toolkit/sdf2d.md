@@ -47,6 +47,18 @@ function square(x,y,size) {
 }
 ```
 
+### Rounded Rectangle
+The "radius" parameter is the radius of the circle used
+to round the corners. If set to 0, corners will be square.
+```
+function roundedRectangle(x,y,xsize,ysize,radius) {
+  dx = abs(x) - xsize + radius;  d1 = max(dx,0);
+  dy = abs(y) - ysize + radius;  d2 = max(dy,0);
+  
+  return min(max(dx, dy), 0.0) + hypot(d1,d2) - radius;  
+}
+```
+
 ### Triangle
 ```
 function triangle(x,y,r) {
@@ -99,7 +111,7 @@ function cross(x,y,size) {
 }
 ```
 
-## n-Sided Regular Polygon
+### n-Sided Regular Polygon
 ```
 function nSidedPolygon(x,y,r,sides) {
   var x1,y1,bn,he;  
@@ -116,3 +128,57 @@ function nSidedPolygon(x,y,r,sides) {
   return hypot(x1 - r, y1 - clamp(y1,-he,he)) * signum(x1 - r)
 }
 ```
+
+### Moon
+```
+// parameters are:
+//  x,y - point being evaluated
+//  radius - radius of outer circle
+//  cutoutRadius - radius of cutout to make "moon"
+//  cutoutPos - x position of cutout, from -1 to 1. "Phase" of moon.
+function moon(x,y,radius,cutoutRadius,cutoutPos) {
+  var c2,a,b;
+  y = abs(y); x =-x;
+  c2 = cutoutPos * cutoutPos;
+  a = (radius*radius - cutoutRadius*cutoutRadius + c2) / (2*cutoutPos);
+  b = sqrt(max(radius*radius-a*a,0));
+  if ((cutoutPos*(x*b-y*a)) > (c2*max(b-y,0.0))) {
+    return hypot(x - a,y - b);
+  }
+  return max(hypot(x,y) - radius,-(hypot(x - cutoutPos, y)-cutoutRadius));
+}
+```
+
+# Operators
+
+### Infinite Repeats
+Careful about cx and cy.  They're the distance between
+repeats in world coordinates.  A factor of 0.5 will
+give you 3x3 repetitions across the display.  To far up or
+down get messy on low res matrix displays.
+```
+  cx = 0.5;
+  cy = 0.5;
+  x = mod(x+0.5*cx,cx)-0.5*cx;
+  y = mod(y+0.5*cy,cy)-0.5*cy;  
+```
+
+// cx,cy are the interval (in world coords) between repeats
+function infiniteRepeat(x,y,cx,cy) {
+  xOut = mod(x+0.5*cx,cx)-0.5*cx;
+  yOut = mod(y+0.5*cy,cy)-0.5*cy;    
+}
+
+### Bend (X and Y)
+Bend the shape around the specified axis.  Due to low
+function bendX(x,y,k) {
+  var c = cos(k*x); var s = sin(k*x);
+  xOut = (c * x) + (s * y);
+  yOut = (s * x) - (c * y);
+}
+
+function bendY(x,y,k) {
+  var c = cos(k*y); var s = sin(k*y);
+  xOut = (c * x) + (s * y);
+  yOut = (s * x) - (c * y);
+}
