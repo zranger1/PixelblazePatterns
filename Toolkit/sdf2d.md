@@ -30,6 +30,20 @@ function signum(a) {
 }
 ```
 
+### Dot
+// dot product for 2D coords
+function dot(x1,y1,x2,y2) {
+  return (x1 * x2 + y1 * y2);
+} 
+
+### Dot2
+dot product of a 2 element vector w/itself
+```
+function dot2(x,y) {
+  return (x * x + y * y);
+}
+```
+
 ### Mix
 Performs linear interpolation between start and end using val to weight between them.
 ```
@@ -201,5 +215,60 @@ function vesica(x,y,r,d) {
   x = abs(x); y = abs(y);
   var b = sqrt(r*r-d*d);
   return ((y - b) * d > x * b) ? hypot(x,y-b) : hypot(x-(-d),y) - r;
+}
+```
+
+### Gear
+```
+// parameters are:
+// x,y - point being evaluated
+// r - radius of gear
+// tSize - gear tooth size in world coords
+// nTeeth - number of gear teeth.
+// Makes reasonably functional stars too!
+function gear (x,y,r,tSize,nTeeth) {
+  return hypot(x,y)/r + tSize * sin(nTeeth*atan2(y,x)) - 1;
+}
+```
+
+### Diamond
+```
+function diamond(x,y,r) {
+  var tmp;
+  x /= 1.414; y /= 1.414;
+  tmp = abs(x + y);
+  x = abs(x - y);
+  y = tmp;
+  return max(x,y)/r - 1
+}
+```
+
+### Line Segment
+Evaluates point <x,y> to see if it lies
+on the segment defined by <x1,y1><x2,y2>
+```
+function lineSegment(x,y,x1,y1,x2,y2) {
+  ax = x - x1; ay = y - y1;
+  bx = x2 - x1; by = y2 - y1;
+  h = clamp((ax * bx + ay * by)/(bx * bx + by * by),0,1);
+  return hypot(ax - bx * h,ay - by * h);
+}
+```
+
+### Heart
+Draws cardiod shape. Low resolution makes the detail a little
+tricky - play with size and line width 'till its the way you like!
+```
+function heart(x,y,r) {
+  var m;
+  x = abs(x);
+  y = r-y;
+  r *= 2;
+  if (x+y>r) {
+    return (sqrt(dot2(x - r*0.25,y - r*0.75)) - (r*0.3536));
+  } else {
+    m = 0.5 * max(x + y,0);
+    return sqrt(min(dot2(x,y-1),dot2(x-m,y-m)) * signum(x-y));
+  }
 }
 ```
