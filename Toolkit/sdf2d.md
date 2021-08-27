@@ -19,7 +19,8 @@ will let you evaluate a single SDF and render the result.
 It comes set up with the n-sided polygon SDF so you can see how it works.  To run your own function, just paste it in and call it in render2D().
 
 ## Utility functions
-Required by one or more of the signed distance functions.
+Required by one or more of the signed distance functions and/or generally useful when writing
+shader-style patterns.
 ### Signum
 ```
 // returns the sign of <a> as follows
