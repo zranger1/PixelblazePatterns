@@ -1,5 +1,19 @@
 # PixelblazePatterns
-Patterns for Pixelblaze LED controller
+Patterns for Pixelblaze LED controller 
+
+NOTE: Library restructuring in progress!  I've got enough patterns
+that keeping them in a single folder no longer made sense. For now:
+
+- 1D patterns (for linear strips) are in the **1D** folder
+- 2D and 3D patterns are in the **2D_and_3D** folder
+- Experiments and works-in-progress are in the **Experimental** folder
+- Shader and signed distance info is in the **Toolkit** folder.
+
+I'll be revising and improving this directory listing as I go.  For
+now, I've left the list of patterns alone-- you can probably figure
+out from the descriptions which folder they are currently in.  -Z
+
+---
 
 ## matrixgreenwaterfall.js
 Basic green "The Matrix"-style waterfall display adapted for 

@@ -29,6 +29,23 @@ function signum(a) {
 }
 ```
 
+### Mix
+Performs linear interpolation between start and end using val to weight between them.
+```
+function mix(start,end,val) {
+  return start * (1-val) + end * val;
+}
+```
+### Smoothstep
+Threshold function with a smooth transition.  Interpolates with a sigmoidal
+curve 0 and 1 when l < v < h. 
+```
+function smoothstep(l,h,v) {
+    var t = clamp((v - l) / (h - l), 0.0, 1.0);
+    return t * t * (3.0 - 2.0 * t);
+}
+```
+
 ## Signed Distance functions for Simple Shapes
 
 ### Circle
@@ -66,7 +83,29 @@ function triangle(x,y,r) {
 }
 ```
 
+### Pentagon
+```
+function pentagon(x,y,r) {
+  x = abs(x); 
+  rtmp = r * 0.7265;
+  
+  var dotP = (-0.809 * x + 0.5878 * y) 
+  x -= 2*min(dotP,0) * -0.809;
+  y -= 2*min(dotP,0) * 0.5857;
+  
+  var dotP = (0.809 * x + 0.5878 * y)  
+  x -= 2*min(dotP,0) * 0.809;
+  y -= 2*min(dotP,0) * 0.5857;  
+  
+  x -= clamp(x,-rtmp,rtmp);
+  y -= r;
+  return hypot(x,y) * signum(y);
+}
+```
+
 ### Hexagon
+Shorter than most hex SDFs -- cheats and takes advantage of
+symmetry about both x and y.
 ```
 function hexagon(x,y,r){
      x = abs(x); y = abs(y);
@@ -154,6 +193,7 @@ function moon(x,y,radius,cutoutRadius,cutoutPos) {
  https://en.wikipedia.org/wiki/Vesica_piscis
 ```
 // parameters are:
+// x,y - point being evaluated
 // r - the maximum width of the disc's intersection 
 // d - the diameter of the two discs (may be larger than the display)
 function vesica(x,y,r,d) {
