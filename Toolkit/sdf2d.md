@@ -31,10 +31,12 @@ function signum(a) {
 ```
 
 ### Dot
+```
 // dot product for 2D coords
 function dot(x1,y1,x2,y2) {
   return (x1 * x2 + y1 * y2);
 } 
+```
 
 ### Dot2
 dot product of a 2 element vector w/itself
