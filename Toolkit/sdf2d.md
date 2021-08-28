@@ -258,7 +258,7 @@ function lineSegment(x,y,x1,y1,x2,y2) {
 ```
 
 ### Heart
-Draws cardiod shape. Low resolution makes the detail a little
+Draws cardioid shape. Low resolution makes the detail a little
 tricky - play with size and line width 'till its the way you like!
 ```
 function heart(x,y,r) {
