@@ -63,6 +63,8 @@ function smoothstep(l,h,v) {
 }
 ```
 
+---
+
 ## Signed Distance functions for Simple Shapes
 
 ### Circle
@@ -272,5 +274,128 @@ function heart(x,y,r) {
     m = 0.5 * max(x + y,0);
     return sqrt(min(dot2(x,y-1),dot2(x-m,y-m)) * signum(x-y));
   }
+}
+```
+---
+
+## Signed Distance functions for Symbols 
+  Contributed by Scruffynerf
+  
+  From https://www.shadertoy.com/view/XsXXDX
+
+### markerT
+```
+function markerT(x,y,size) {
+   size = size*2
+   r1 = max(abs(x -size/3. + size/3.), abs(x - size/3. - size/3.));
+   r2 = max(abs(y - size/3.), abs(y + size/3.));
+   r3 = max(abs(x), abs(y));
+   r = max(min(r1,r2),r3);
+   r -= size/2.;
+   return r;
+}
+```
+
+### markerCheck
+```
+function markerCheck(px,py,size){
+    x = -SQRT1_2 * (px - py);
+    y =  SQRT1_2 * (px + py);
+    size = size*2
+    r1 = max(abs(x - 2.*size/3.), abs(x - 1.*size/3.));
+    r2 = max(abs(y - 2.*size/3.), abs(y - size/3.));
+    r3 = max(abs(x),max(abs(x-size/3.), abs(y)));
+    r = max(min(r1,r2),r3);
+    r -= size/2;
+    return r;
+}
+```
+
+### markerCross
+```
+function markerCross(px,py,size){
+  x = SQRT1_2 * (px - py);
+  y = SQRT1_2 * (px + py);
+  size = size/1.5
+  r1 = max(abs(x - size), abs(x + size));
+  r2 = max(abs(y - size), abs(y + size));
+  r3 = max(abs(x), abs(y));
+  r = max(min(r1,r2),r3);
+  r -= size*1.5;
+  return r;
+}
+```
+
+### markerClobber
+```
+function markerClobber(px,py,size){
+   size = size * 2
+    c1y = -0.25;
+    c2x = 0.216507
+    c2y = 0.125;
+    r1 = hypot(px, py - c1y*size) - size/3.5;
+    r2 = hypot(px - c2x*size, py - c2y*size) - size/3.5;
+    r3 = hypot(px + c2x*size, py - c2y*size) - size/3.5;
+    return min(min(r1,r2),r3);
+}
+```
+
+### markerAsterisk
+```
+function markerAsterisk(px,py,size){
+   x = SQRT1_2 * (px - py);
+   y = SQRT1_2 * (px + py);
+   size = size * 2
+   r1 = max(abs(x)- size/2., abs(y)- size/10.);
+   r2 = max(abs(y)- size/2., abs(x)- size/10.);
+   r3 = max(abs(px)- size/2., abs(py)- size/10.);
+   r4 = max(abs(py)- size/2., abs(px)- size/10.);
+   return min( min(r1,r2), min(r3,r4));
+}
+```
+
+### markerChevron
+```
+function markerChevron(px,py,size){
+    x = 1/SQRT2 * (px - py);
+    y = 1/SQRT2 * (px + py);
+    size = size * 2
+    r1 = max(abs(x), abs(y)) - size/3;
+    r2 = max(abs(x-size/3.), abs(y-size/3.)) - size/3.;
+    return max(r1,-r2);
+}
+```
+
+### markerRing
+```
+function markerRing(px,py,size){
+    r1 = circle(px,py,size);
+    r2 = circle(px,py,size/2);
+    return max(r1,-r2);
+}
+```
+
+### markerInfinity
+```
+function markerInfinity(px,py,size){
+    c1x = .125
+    size = size * 5
+    r1 = circle(px-c1x*size,py,size/6);
+    r2 = circle(px-c1x*size,py,size/14);
+    r3 = circle(px+c1x*size,py,size/6);
+    r4 = circle(px+c1x*size,py,size/14);
+    return min( max(r1,-r2), max(r3,-r4));
+}
+```
+
+### markerTag
+```
+function markerTag(px,py,size){
+    x = -px;
+    y = py;
+    size = size * 3
+    r1 = max(abs(x)- size/2., abs(y)- size/6.);
+    r2 = abs(x-size/1.5)+abs(y)-size;
+    return max(r1,.75*r2);
 }
 ```
