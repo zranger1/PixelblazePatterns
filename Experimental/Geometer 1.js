@@ -4,11 +4,11 @@ var maxObjects = 4;
 var numObjects = 4;
 export var objectSize = 0.21;
 export var speed = 0.18;
-var numShapes = 4;
+var numShapes = 5;
 var shapeSdf = array(numShapes)
 var shapeCompare = array(2);
-var filled = 0;
-var lineWidth = 0.04;
+var filled = 1;
+export var lineWidth = 0.04;
 
 var theta;
 
@@ -19,6 +19,7 @@ shapeSdf[0] = circle;
 shapeSdf[1] = square;
 shapeSdf[2] = triangle;
 shapeSdf[3] = hexagon;
+shapeSdf[4] = hexStar;
 
 // signed distance functions for various shapes, adapted for 2D. 
 // Math from https://iquilezles.org/www/articles/distfunctions/distfunctions.htm
@@ -41,6 +42,20 @@ function hexagon(x,y,r){
      return  max((x * 0.5 + y * 0.866025),x) - r;
 }
 
+function hexStar(x,y,r) {
+  x = abs(x*2); y = abs(y*2); 
+  dot = 2 * min(-0.5*x + 0.866025 * y,0);
+  x -= dot * -0.5; y -= dot * 0.866025;
+  
+  dot = 2 * min(0.866025*x + -0.5 * y,0);
+  x -= dot * 0.866025; y -= dot * -0.5;
+  
+  x -= clamp(x, r * 0.5773502692, r * 1.7320508076);
+  y -= r;
+  result = hypot(x,y);
+  return (y > 0) ? result : -result;
+}
+
 // array of object vectors
 var objects = array(maxObjects);
 
@@ -57,9 +72,13 @@ export function sliderFilled(v) {
   filled = (v >= 0.5);
 }
 
+export function sliderLineWidth(v){
+  lineWidth = 0.25 * v * v;
+}
+
 // allocate memory for object vectors
 function createObjects() {
-  for (var i = 0; i < maxObjects; i++) {  
+  for (var i = 0; i < maxObjects; i++) { 
     objects[i] = array(8);
   }
 }
@@ -107,10 +126,7 @@ export function beforeRender(delta) {
   bounce();
   theta = PI2 * time(0.1);
 
-// uncomment the block below to rotate entire scene around its
-// center
 /*
-
   resetTransform();
   translate(-0.5,-0.5);  
   rotate(theta);  

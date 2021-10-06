@@ -1,16 +1,18 @@
 /* DOOM Fire
 
- 2D Fire effect, with "enhanced" dragon's breath mode. The method is inspired by the low-res 
- fire in the prehistoric PSX port of DOOM!  It uses no Perlin or other gradient, value or
- fractal noise.
- Details: https://fabiensanglard.net/doom_fire_psx/
+ Updated 2D Fire effect, with "enhanced" dragon's breath mode. 
+ Now with More, Better fire!  Version 2 has more dramatic flame,
+ and an improved wind algorithm. 
+ 
+ The method is inspired by the low-res fire in the prehistoric PSX port of DOOM!
+ Details: https://fabiensanglard.net/doom_fire_psx/ It's purely convolution-based 
+ fire -- no Perlin or other gradient, value or fractal noise fields. 
  
  Requires a 2D display and an appropriate mapping function.
 
  MIT License
  
- Version  Author        Date      
- 1.0.1    JEM(ZRanger1) 07/19/2021  Better wind algorithm
+ v2.0    JEM(ZRanger1) 09/02/2021 
 */ 
 
 // display size - enter the dimensions of your display here
@@ -32,7 +34,7 @@ var pb1, pb2;                      // buffer pointers for swapping
 
 var baseHue = 0;
 var baseBri = 0.6;
-var maxCooling = 0.34;        // how quickly flames die down  
+var maxCooling = 0.275;        // how quickly flames die down  
 var dragonMode = 0;           // 0: plain old fire, 1: dragon's breath
 var breathTimer;              // dragon's breath cycle time
 var wind = 0.50;              // probability of wind direction change. 0 == no wind
@@ -104,7 +106,7 @@ function perturbDragonBreath() {
 // change the base heat in a slow wave
 function perturbNormal() {
  for (var i = 0; i < arrayWidth; i ++) {
-   pb2[i][lastRow] = 0.8+wave(triangle(time(0.3))+(i/arrayWidth))/3;
+   pb2[i][lastRow] = 0.9+wave(triangle(time(0.3))+(i/arrayWidth))/3;
   }
 }
 
@@ -125,7 +127,7 @@ function doFire() {
     // cooling effect decreases with height, so very hot particles
     // that don't cool early on get "carried" farther.  It just looks better.
    for (var y = 1; y < lastRow; y++) {
-      var r = (maxCooling * random(1-(y/lastRow)));
+      var r = random(maxCooling) * (y/lastRow);
       var windFx = (abs((lastRow / 2) - y) / lastRow);
       windFx = x + (random(1) < 0.5-windFx) * windDirection;
       pb2[x][y] = max(0,pb1[windFx][y+1] - r);
@@ -154,5 +156,5 @@ export function render2D(index, x, y) {
   x = 1+(x * width);  y = y * height;
   bri = pb2[x][y];
   bri = bri * bri * bri;
-  hsv(baseHue+((0.05*bri)), 1.3-bri/4,bri * baseBri);
+  hsv(baseHue+((0.05*bri)), 1.3-bri/4,baseBri * bri);
 }
