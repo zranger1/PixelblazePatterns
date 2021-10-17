@@ -4,15 +4,21 @@
 //
 // 08/03/2021 - ZRanger1
 
+
 var timebase = 0;
 var t1;
 var zoom;
 export var speed = 7;
+export var twist = 2.4
 
 translate(-0.5,-0.5);
 
 export function sliderSpeed(v) {
   speed = 1+(9*v);
+}
+
+export function sliderTwist(v) {
+  twist = 1.25+(0.75*v);
 }
 
 export function beforeRender(delta) {
@@ -24,7 +30,7 @@ export function beforeRender(delta) {
 export function render2D(index,x,y) {
   var h,b,radius,theta;  
   
-  radius = 1.7-hypot(x,y)*2.4;
+  radius = twist-hypot(x,y)*2.4;
   theta = radius * radius * sin(radius + t1);
   x = (cos(theta) * x) - (sin(theta)* y);
 
