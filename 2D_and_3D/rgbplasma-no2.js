@@ -7,6 +7,8 @@ var timebase = 0;
 var t1,t2;
 export var speed = .6;
 export var scaleFactor = 0.8;
+export var isRadial = 0;
+export var isMirror = 0;
 translate(-0.5,-0.5);
 
 export function sliderSpeed(v) {
@@ -14,7 +16,15 @@ export function sliderSpeed(v) {
 }
 
 export function sliderScale(v) {
-  scaleFactor = max(0.4,v*2);
+  scaleFactor = max(0.001,v*4);
+}
+
+export function sliderRadial(v) {
+  isRadial = (v > 0.5);
+}
+
+export function sliderMirror(v) {
+  isMirror = (v > 0.5);
 }
 
 export function beforeRender(delta) {
@@ -26,6 +36,9 @@ export function beforeRender(delta) {
 }
 
 export function render2D(index,x,y) {
+  if (isMirror) {x = -abs(x); y = -abs(y);}
+  if (isRadial) {tmp = atan2(y,x); y = hypot(x,y); x = tmp;}
+    
   var y1 = y;
   var x1 = x;
   
