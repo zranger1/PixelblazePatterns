@@ -11,7 +11,7 @@
    7/09/21 JEM(zranger1)
 */
 export var sc = 1.5;
-export var speed = 50;
+export var speed = 1.1;
 export var s2;
 export var isRadial = 0;
 export var isMirror = 0;
