@@ -1,11 +1,11 @@
 // RGB Plasma No 3
-// Rainbows of light
+// Rainbow arcs of light
 //
 // 10/26/2021 - ZRanger1
 
 var timebase;
 var t1;
-export var scale = .5;
+export var scale = .8;
 export var speed = 1;
 var isRadial = 0;
 var isMirror = 0;
@@ -46,5 +46,5 @@ export function render2D(index,x,y) {
   r = wave(x1); 
   g = wave(y1); 
   b = wave(x1 + y1);
-  rgb(r,g,b);
+  rgb(r*r,g*g,b*b);
 }

@@ -16,7 +16,7 @@ export function sliderSpeed(v) {
 }
 
 export function sliderScale(v) {
-  scaleFactor = max(0.001,v*4);
+  scaleFactor = 0.01 + (v * 2);
 }
 
 export function sliderRadial(v) {
@@ -30,11 +30,9 @@ export function sliderMirror(v) {
 export function beforeRender(delta) {
   timebase = (timebase + delta/1000) % 1000;
   t1 = timebase * speed
-  resetTransform();
-  translate(-0.5,-0.5)
-  scale(scaleFactor,scaleFactor);
 }
 
+var t2;
 export function render2D(index,x,y) {
   if (isMirror) {x = -abs(x); y = -abs(y);}
   if (isRadial) {tmp = atan2(y,x); y = hypot(x,y); x = tmp;}
@@ -43,11 +41,11 @@ export function render2D(index,x,y) {
   var x1 = x;
   
   for (var i = 1; i < 5; i++) {
-    x1 += (1/i*cos(i*y*.8+t1));
-    y1 += abs(1/i*sin(i*x*.8+t1));
+    x1 += scaleFactor/i*cos(i*y*.8+t1);
+    y1 += abs(scaleFactor/i*sin(i*x*.8+t1));
     x = x1; y = y1;
   }
 
-  r = wave(x); g = wave(y); b = wave(x * y);
+  r = triangle(x+t1); g = triangle(y-t1); b = triangle(t1+x*y);
   rgb(r*r,g*g,b*b);
 }
