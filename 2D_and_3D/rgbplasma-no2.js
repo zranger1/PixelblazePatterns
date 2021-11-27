@@ -1,18 +1,18 @@
-// Another sin/cos RGB plasma.  
+// Another RGB plasma, made with mostly triangle waves
 // This one is smooth, bright and 
-// sort of circle-y.
-// 08/20/2021 - ZRanger1
+// has a liquid feel
+// 11/06/2021 - ZRanger1
 
 var timebase = 0;
 var t1,t2;
-export var speed = .6;
-export var scaleFactor = 0.8;
+export var speed = .1546;
+export var scaleFactor = 0.565;
 export var isRadial = 0;
 export var isMirror = 0;
 translate(-0.5,-0.5);
 
 export function sliderSpeed(v) {
-  speed = 0.25+(3*v);
+  speed = 0.025+ v * v;
 }
 
 export function sliderScale(v) {
@@ -41,8 +41,8 @@ export function render2D(index,x,y) {
   var x1 = x;
   
   for (var i = 1; i < 5; i++) {
-    x1 += scaleFactor/i*cos(i*y*.8+t1);
-    y1 += abs(scaleFactor/i*sin(i*x*.8+t1));
+    x1 += scaleFactor/i*wave(triangle(i*y*.1+t1));
+    y1 += scaleFactor/i*wave(triangle(i*x*.3+t1));
     x = x1; y = y1;
   }
 

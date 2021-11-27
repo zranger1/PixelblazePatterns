@@ -1,16 +1,20 @@
-// Falling webs, strands and occasional legs...
-// There must be spiders in here somewhere
+// Glowing, neon strands and webs... 
 // For 2D displays.
 // 9/10/2021 ZRanger1
 
-var timebase
+var timebase;
+
+function smoothstep(l,h,v) {
+    var t = clamp((v - l) / (h - l), 0.0, 1.0);
+    return t * t * (3.0 - 2.0 * t);
+}
 
 export function beforeRender(delta) {
   timebase = (timebase + delta/1000) % 3600;
 }
 
 translate(-0.5,-0.5)
-scale(0.2,0.2);
+scale(0.25,0.25);
 
 export function render2D(index,x,y) {
   vColor = 0;
@@ -33,9 +37,10 @@ export function render2D(index,x,y) {
   // brighten the heck out of everything, 'till it
   // looks like it's glowing, then gamma adjust a bit
   tmp = r + g + b;
-  r = clamp(r * tmp,0,1); r = max(0.05,r*r);
-  g = clamp(g * tmp,0,1); g = max(0.05,g*g);
-  b = clamp(b * tmp,0,1); b = max(0.05,b*b);
+
+  r = smoothstep(0.2,.81, r * tmp);
+  g = smoothstep(0.2,.81, g * tmp);
+  b = smoothstep(0.2,.81, g * tmp);
   
   rgb(r,g,b);
 }

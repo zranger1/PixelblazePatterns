@@ -3,8 +3,9 @@
 // Worley noise is widely used on high resolution displays to generate
 // voronoi-like distance fields while limiting the number of per-pixel
 // comparisons.
+//
 // On LED displays though, the number of pixels is so small that it's 
-// actually faster to just generate the normal voronoi distance.
+// actually faster to just calculate the normal voronoi distance.
 //
 // I'm still looking ways to make this faster and more useful though!
 // 7/4/2021 ZRanger1

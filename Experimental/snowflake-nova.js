@@ -9,6 +9,8 @@
  
  Requires a 2D display and appropriate mapping function. Best
  with some sort of diffuser over the display.
+ 
+ TODO - Needs some work on performance.
 
  MIT License
  
@@ -148,25 +150,26 @@ function snowflakeDf(x,y) {
       return (v < 0.1) ? 0 : v;
 } 
 var theta;
+var tColor;
 frameSeed = random(32761);
 export function beforeRender(delta) {
   frameTimer += delta;
+  tColor = time(0.08);
   
 
   if (frameTimer > frameMs) {
-//    frameSeed = random(32761);
+    frameSeed = random(32761);
     frameTimer = 0;
   }
-  theta = (theta + 0.1)  % PI2
+  theta = (theta + 0.05)  % PI2
   resetTransform();
   translate(-0.5,-0.5);
-//  rotate(theta);    
+  rotate(theta);    
   scale(SCALE,SCALE);
 
 }
 
 export function render2D(index,x,y)  {
   var v = snowflakeDf(x,y)
-  r = hypot(x,y);
-  hsv(r, 1, v*v)
+  hsv(tColor+hypot(x,y), 1, v*v*v)
 }

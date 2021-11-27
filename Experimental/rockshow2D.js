@@ -85,7 +85,7 @@ export function render2D(index,x,y) {
         b += k0 * centerB;
       }
       else {
-//       k1 = k1 * k1;
+        k1 = k1 * k1;
         r += k1 * edgeR; 
         g += k1 * edgeG;
         b += k1 * edgeB;
@@ -94,6 +94,6 @@ export function render2D(index,x,y) {
   }
   
   // limit range, gamma correct and display
-  r = min(1,r*r); g = min(1,g*g); b = min(1,b*b);
+  r = clamp(0,1,r); g = clamp(0,1,g); b = clamp(0,1,b);
   rgb(r,g,b);
 }
