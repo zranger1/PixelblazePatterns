@@ -9,13 +9,18 @@
 
 // animation control variables
 export var offset = 0.025;
-export var speed = 0.3;
+export var speed = 0.9;
+export var shift = 7;
 var timebase = 0;
 
 
 // UI - controls both speed and direction
 export function sliderSpeed(v) {
   speed = -1+2*v;
+}
+
+export function sliderShifter(v) {
+  shift = 1+floor(v * 15);
 }
 
 
@@ -39,7 +44,7 @@ export function beforeRender(delta) {
   cosT = cos(theta); sinT = sin(theta);
   
   // rotation rate for individual offset components
-  offset = 0.25 * cosT; 
+  offset = 0.275 * (cosT + sinT); 
 }
 
 export function render2D(index,x,y) {
@@ -73,11 +78,6 @@ export function render2D(index,x,y) {
     tmp = abs(offset-outX);
     b *= tmp; r *= tmp;
   
-    g *= abs(x); b *= abs(p2); r *= abs(p3);
-    
-    r = clamp((r<<11),0,1);
-    g = clamp((g<<11),0,1);
-    b = clamp((b<<11),0,1);
-    
-    rgb(r,g,b);
+    g *= abs(x)<<shift; b *= abs(p2)<<shift; r *= abs(p3)<<shift;
+    rgb(r,g,b); 
 }
