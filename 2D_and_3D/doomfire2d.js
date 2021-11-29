@@ -12,7 +12,7 @@
 
  MIT License
  
- v2.0    JEM(ZRanger1) 09/02/2021 
+ v2.1    JEM(ZRanger1) 10/10/2021 
 */ 
 
 // display size - enter the dimensions of your display here
@@ -42,6 +42,7 @@ var windDirection = 0;        // current wind direction
 var frameTimer = 9999;        // accumulator for simulation timer
 var simulationSpeed = 60;     // min milliseconds between simulation frames
 var perturb = perturbNormal;  // pointer to fn that plays with fire
+var desat = 1.3;              // used when calculating how "white" hot pixels get
 
 // UI
 export function hsvPickerHue(h,s,v) {
@@ -77,6 +78,10 @@ export function sliderDragonMode(v) {
 // for your display
 export function sliderSpeed(v) {
   simulationSpeed = v * 200;
+}
+
+export function sliderWhiteHeat(v) {
+  desat = 1.25 + (1-v);
 }
 
 // create two buffers for calculation
@@ -126,7 +131,7 @@ function doFire() {
 
     // cooling effect decreases with height, so very hot particles
     // that don't cool early on get "carried" farther.  It just looks better.
-   for (var y = 1; y < lastRow; y++) {
+   for (var y = 0; y < lastRow; y++) {
       var r = random(maxCooling) * (y/lastRow);
       var windFx = (abs((lastRow / 2) - y) / lastRow);
       windFx = x + (random(1) < 0.5-windFx) * windDirection;
@@ -156,5 +161,5 @@ export function render2D(index, x, y) {
   x = 1+(x * width);  y = y * height;
   bri = pb2[x][y];
   bri = bri * bri * bri;
-  hsv(baseHue+((0.05*bri)), 1.3-bri/4,baseBri * bri);
+  hsv(baseHue+((0.05*bri)), desat-bri/4,baseBri * bri);
 }
