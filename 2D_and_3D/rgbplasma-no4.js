@@ -12,6 +12,10 @@ export function sliderSpeed(v) {
   speed = 5 * v;
 }
 
+export function sliderScale(v) {
+  scaleFactor = 1+2*v;
+}
+
 translate(-0.5,-0.5);
 
 var timebase;
