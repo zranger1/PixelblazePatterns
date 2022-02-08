@@ -31,20 +31,22 @@ var __bri  = 7;          // current actual brightness
 
 // dimensions of various data arrays
 var __max_segments = 12;
-var __dataCols = 8;        // columns in segment control array
-var __n_effects = 19;      // number of available effects
-var __n_locals = 3;        // max number of per-segment local variables
+var __dataCols = 8;      // columns in segment control array
+var __n_effects = 19;    // number of available effects
+var __n_locals = 3;      // max number of per-segment local variables
 
 // Variables visible to websockets
-export var __ver = 2       // identifies pattern version to automation driver
+export var __ver = 2      // used to identify pattern version to automation driver
 export var __n_segments = 4;  // number of segments (range 1-__max_segments)
-export var __boot = 1;     // set to 0 by automation driver after setting segment data
-export var __state = 0;    // currently running on/off fade state. 
+export var __boot = 1;    // set to 0 by automation driver after setting segment data
+export var __state = 0;   // currently running on/off fade state. 
 
 // GLOBAL VARIABLES 
-var fadeLength = 1000    // transition length (milliseconds)
+var fadeLength = 2.0     // transition length in seconds (NOT MS!)
 var fadeTime = 0         // accumulator for timing on/off fades
 var segBri = array(__max_segments)   // final segment brightness after all adjustments
+var fadeTarget = array(__max_segments)
+var fadeStepsize = array(__max_segments) 
 
 // beforeRender processing for fade in/fade out transitions
 // driver can invoke fades by setting the __state var w/websockets
@@ -142,6 +144,8 @@ function SetSegHSB(z,h,s,b) {
 	segTable[z][__sat] = s;      // saturation
 	segTable[z][__briTgt] = b;   // brightness
   segTable[z][__bri] = b;      // no transition
+  fadeTarget[z] = b; 
+  fadeStepsize[z] = 0;
 }	
 
 // set on/off state of specified zone
@@ -479,7 +483,7 @@ function fadeIn(delta) {
 }
 
 function fadeOut(delta) {
-	fadeTime += delta;
+	fadeTime += delta / 1000;
 	if (fadeLevel > 0) {
 	  fadeLevel = max(0,1-(2 * fadeTime / fadeLength));
 	  fadeLevel = fadeLevel * fadeLevel * fadeLevel;
@@ -498,18 +502,28 @@ function normalRun(delta) { ; }
 // functions for active effects
 export function beforeRender(delta) {
 	var start = 0;
-	var i,dBri;
-  
-  // calculcate brightness change multiplier
-  dBri = delta / fadeLength;
+	var i,t;
 
 	states[__state](delta);
 	
   for (i = 0; i < __n_segments; i++) {
     var a = segTable[i];
     
-    a[__bri] += dBri * (a[__briTgt] - a[__bri]);
+    // handle smooth brightness fades
+    t = a[__briTgt];
+    if (t != fadeTarget[i]) {
+      fadeTarget[i] = t;
+      fadeStepsize[i] = (t - a[__bri]) / fadeLength;
+    }    
     
+    // check for end of fade
+    if (abs(t - a[__bri]) <= 0.00125) {
+       a[__bri] = a[__briTgt] = fadeTarget[i] = t;      
+    } else {
+       a[__bri] += fadeStepsize[i] * delta / 1000;      
+    }
+    
+       
     segStart[i] = start;
     start += a[__size];   
     segEnabled[i] = a[__switch] && (segStart[i] < pixelCount) && (a[__size] > 0);
