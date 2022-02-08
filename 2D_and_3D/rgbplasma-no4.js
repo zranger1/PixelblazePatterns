@@ -2,34 +2,32 @@
 //
 // 01/30/2022 ZRanger1
 
-var scaleFactor = 2;
-var speed = 1;
-var waveConst = [4,-2,3.464]
-var waveMult = array(3);
-var isRadial = 0,isMirror = 0;
+export var scaleFactor = 1.5;
+export var speed = 1.86;
+var waveConst = [0.25,0,-0.5,.2887,-0.5,-0.3333]
+var waveMult = array(6);
 
 export function sliderSpeed(v) {
   speed = 5 * v;
 }
 
 export function sliderScale(v) {
-  scaleFactor = 1+2*v;
+  scaleFactor = 0.5+2*v;
 }
 
-translate(-0.5,-0.5);
+translate(0.5,-0.5);
 
-var timebase;
+var t1;
 export function beforeRender(delta) {
-  timebase = (timebase + delta/1000) % 1000;
-  t1 = timebase * speed;
-  arrayMapTo(waveConst, waveMult,(v,i,a) => (v * scaleFactor)) 
+  t1 = time(1/speed * 0.1);
+  arrayMapTo(waveConst, waveMult,(v,i,a) => (v * scaleFactor));
 }
 
 export function render2D(index,x,y) {
   var r,g,b;  
-  r = 0.5+0.5*cos(t1+x * waveMult[0]);
-  g = 0.5+0.5*cos(t1+(x * waveMult[1] + y * waveMult[2]));
-  b = 0.5+0.5*cos(t1+(x * waveMult[1] + y * -waveMult[2]));  
+  r = wave(t1+(x * waveMult[0] + y * waveMult[1]));  
+  g = wave((t1+r)+(x * waveMult[2] + y * waveMult[3]));   
+  b = wave((r+g)-(x * waveMult[4] + y * waveMult[5])); 
   
-  rgb(r*r,g*g,b*b);
+  rgb(r,g,b);
 }
