@@ -42,7 +42,7 @@ export var __boot = 1;    // set to 0 by automation driver after setting segment
 export var __state = 0;   // currently running on/off fade state. 
 
 // GLOBAL VARIABLES 
-var fadeLength = 2.0     // transition length in seconds (NOT MS!)
+export var fadeLength = 2.0  // transition length in seconds (NOT MS!)
 var fadeTime = 0         // accumulator for timing on/off fades
 var segBri = array(__max_segments)   // final segment brightness after all adjustments
 var fadeTarget = array(__max_segments)
