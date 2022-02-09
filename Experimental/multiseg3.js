@@ -23,15 +23,14 @@
 var __switch = 0;        // on/off state
 var __hue = 1;           // hue 
 var __sat = 2;           // saturation 
-var __briTgt = 3;        // target brightness 
+var __bri = 3;           // target brightness 
 var __effect = 4;        // effect number
 var __size = 5;          // number of pixels in segment
 var __speed = 6;         // effect speed (for effects that support it)
-var __bri  = 7;          // current actual brightness
 
 // dimensions of various data arrays
 var __max_segments = 12;
-var __dataCols = 8;      // columns in segment control array
+var __dataCols = 7;      // columns in segment control array
 var __n_effects = 19;    // number of available effects
 var __n_locals = 3;      // max number of per-segment local variables
 
@@ -43,8 +42,9 @@ export var __state = 0;   // currently running on/off fade state.
 
 // GLOBAL VARIABLES 
 export var fadeLength = 2.0  // transition length in seconds (NOT MS!)
-var fadeTime = 0         // accumulator for timing on/off fades
+var fadeTime = 0         // accumulator for master fader
 var segBri = array(__max_segments)   // final segment brightness after all adjustments
+var actualBri = array(__max_segments)
 var fadeTarget = array(__max_segments)
 var fadeStepsize = array(__max_segments) 
 
@@ -142,8 +142,8 @@ function SetSegSize(z,nPixels) {
 function SetSegHSB(z,h,s,b) {
 	segTable[z][__hue] = h;      // hue
 	segTable[z][__sat] = s;      // saturation
-	segTable[z][__briTgt] = b;   // brightness
   segTable[z][__bri] = b;      // no transition
+  actualBri[z] = b;
   fadeTarget[z] = b; 
   fadeStepsize[z] = 0;
 }	
@@ -509,25 +509,28 @@ export function beforeRender(delta) {
   for (i = 0; i < __n_segments; i++) {
     var a = segTable[i];
     
-    // handle smooth brightness fades
-    t = a[__briTgt];
+    // handle smooth level changes
+    t = a[__bri];
+    
+    // if brightness was changed since last frame,
+    // set target level and calculate fade step size
     if (t != fadeTarget[i]) {
-      fadeTarget[i] = t;
-      fadeStepsize[i] = (t - a[__bri]) / fadeLength;
+      fadeTarget[i] = t;  
+      fadeStepsize[i] = (t - actualBri[i]) / fadeLength;
     }    
     
     // check for end of fade
-    if (abs(t - a[__bri]) <= 0.00125) {
-       a[__bri] = a[__briTgt] = fadeTarget[i] = t;      
+    if (abs(t - actualBri[i]) <= 0.00125) {
+       a[__bri] = actualBri[i] = fadeTarget[i] = t;      
     } else {
-       a[__bri] += fadeStepsize[i] * delta / 1000;      
+       actualBri[i] += fadeStepsize[i] * delta / 1000;      
     }
     
        
     segStart[i] = start;
     start += a[__size];   
     segEnabled[i] = a[__switch] && (segStart[i] < pixelCount) && (a[__size] > 0);
-    segBri[i] = a[__bri] * fadeLevel;
+    segBri[i] = actualBri[i] * fadeLevel;
 
     if (segEnabled[i]) segPreRender[a[__effect]](i,a,delta);
   }
@@ -536,7 +539,7 @@ export function beforeRender(delta) {
 }
 
 // if segment is on, call rendering fn from table
-// if off, set pixel off.  Segments of zero length
+// if off, set pixel off.  Segments of 0 length
 // are treated as "off".
 var segNumber = 0;
 export function render(index) {
