@@ -7,15 +7,15 @@
  This version of the pattern is made to be controlled via websockets, so
  it does not support the Pixelblaze Web UI. 
  
- 2020-2021 ZRanger1
+ 2020-2022 ZRanger1
  
  MIT License
  
  Version Date        Comment
- 2.0.0   02/02/2021  v2 release
- 2.0.1   02/03/2021  fixed __state/__switch bug
- 2.0.2   02/07/2021  fix unable to set color in glitter effect 
- 3.0.0   02/08/2022  brightness transitions
+ 2.0.0    02/02/2021  v2 release
+ 2.0.1    02/03/2021  fixed __state/__switch bug
+ 2.0.2    02/07/2021  fix unable to set color in glitter effect 
+ 3.0.0    02/10/2022  v3 release - smooth fades
 */
 
 // CONSTANTS 
@@ -26,34 +26,24 @@ var __sat = 2;           // saturation
 var __bri = 3;           // target brightness 
 var __effect = 4;        // effect number
 var __size = 5;          // number of pixels in segment
-var __speed = 6;         // effect speed (for effects that support it)
+var __speed = 6;         // effect speed
+var __ftime = 7          // fade in/out time (seconds, NOT ms)
 
 // dimensions of various data arrays
 var __max_segments = 12;
-var __dataCols = 7;      // columns in segment control array
+var __dataCols = 8;      // columns in segment control array
 var __n_effects = 19;    // number of available effects
 var __n_locals = 3;      // max number of per-segment local variables
 
 // Variables visible to websockets
-export var __ver = 2      // used to identify pattern version to automation driver
-export var __n_segments = 4;  // number of segments (range 1-__max_segments)
-export var __boot = 1;    // set to 0 by automation driver after setting segment data
-export var __state = 0;   // currently running on/off fade state. 
+export var __ver = 3         // used to identify pattern version 
+export var __n_segments = 4; // number of segments (range 1 -__max_segments)
 
 // GLOBAL VARIABLES 
-export var fadeLength = 2.0  // transition length in seconds (NOT MS!)
-var fadeTime = 0         // accumulator for master fader
-var segBri = array(__max_segments)   // final segment brightness after all adjustments
-var actualBri = array(__max_segments)
+var segBri = array(__max_segments)  
+var fadeStart = array(__max_segments)
 var fadeTarget = array(__max_segments)
-var fadeStepsize = array(__max_segments) 
-
-// beforeRender processing for fade in/fade out transitions
-// driver can invoke fades by setting the __state var w/websockets
-var states = array(3)                 
-states[0] = fadeIn;                  
-states[1] = normalRun;
-states[2] = fadeOut;
+var fadeTime = array(__max_segments) 
 
 /*
  Per segment data array. Twelve arrays are initially configured. The
@@ -105,6 +95,22 @@ var segEnabled = array(__max_segments);
 var localStore = array(__n_locals * __max_segments); 
 
 // HELPER FUNCTIONS
+
+// slow, smooth exponential fade both up and down
+function SmoothFade(s,e,pct) {
+    var d = e-s;
+    
+    if (d >= 0) {
+      d = s + (pct * pct * d)
+    }
+    else {
+     pct = 1-pct
+     d = e - (pct * pct * d)
+    }
+
+    return d
+}
+
 function SetRenderer(n,pre,rend) {
   segPreRender[n] = pre;
   segRender[n] = rend;
@@ -118,11 +124,11 @@ function SetVar(z,index,v) {
   localStore[(__n_locals * z)+index] = v;
 }
 
-// Set zone size in pixels.  Zero is the minimum size,
-// pixelCount the max.  If you change the size of a zone,
-// the zones that follow it will have their sizes adjusted 
-// as well. By definition, the first zone always starts at the
-// first pixel, and the last zone ends at the last pixel.
+// Set segment size in pixels.  Zero is the minimum size,
+// pixelCount the max.  If you change a segment's size
+// the segments that follow it will be adjusted
+// as well. By definition, the first segment always starts at the
+// first pixel,the last one ends at the last pixel.
 function SetSegSize(z,nPixels) {
   var usedPixels = 0;
   
@@ -137,31 +143,6 @@ function SetSegSize(z,nPixels) {
     usedPixels += a[__size];
   }	  
 }
-
-// Set hsb color of the specified zone
-function SetSegHSB(z,h,s,b) {
-	segTable[z][__hue] = h;      // hue
-	segTable[z][__sat] = s;      // saturation
-  segTable[z][__bri] = b;      // no transition
-  actualBri[z] = b;
-  fadeTarget[z] = b; 
-  fadeStepsize[z] = 0;
-}	
-
-// set on/off state of specified zone
-function SetSegState(z, state) {
-	segTable[z][__switch] = state;
-}
-
-// set special effect for zone
-function SetSegEffect(z, effect) {
-	segTable[z][__effect] = effect;
-}
-
-// set effect speed for zone 
-function SetSegSpeed(z,speed) {
-  segTable[z][__speed]=speed;
-}  
 
 function Initialize() {	
 
@@ -186,7 +167,7 @@ function Initialize() {
   SetRenderer(17,preRainbowUp,renderRainbow)
   SetRenderer(18,preRainbowDown,renderRainbow)
 
-// set up table of segment status arrays 
+// set up table of segment state arrays 
   segTable[0] = z_0;
   segTable[1] = z_1;
   segTable[2] = z_2;
@@ -200,15 +181,23 @@ function Initialize() {
   segTable[10] = z_10; 
   segTable[11] = z_11;   
 
-// For the Home Automation version of this pattern, we depend on the
-// automation controller to save and restore persistent segment data, so at initialization
-// time, all segments are simply set to equal length and a dimmed warm white.  
+// The Home Automation version of this pattern depends on a 
+// controller to save and restore persistent data, so initialization
+// just sets template values
   var def_segsize = floor(pixelCount/__max_segments);
   for (var i = 0; i < __max_segments; i++) {
-    SetSegState(i,true);     
-    SetSegEffect(i,0);
-    SetSegHSB(i,0,1,0)
-    SetSegSpeed(i,1);
+    fadeStart[i] = 0;
+    fadeTarget[i] = 0; 
+    fadeTime[i] = 0;
+    segBri[i] = 0;    
+    
+	  segTable[i][__switch] = 1
+	  segTable[i][__hue] = 0
+	  segTable[i][__sat] = 1
+	  segTable[i][__bri] = 0	  
+	  segTable[i][__effect] = 0
+	  segTable[i][__speed] = 1
+	  segTable[i][__ftime] = 0
     SetSegSize(i,def_segsize);      
   }
 } 
@@ -258,7 +247,7 @@ function preGlitter(z,a,delta) {
 
 function renderGlitter(z,a,index) {
   b = pRandom(GetVar(z,1) * index) 
-  hsv(a[__hue],1-(b*0.03),b*b*b);
+  hsv(a[__hue],1-(b*0.03),b*b*b*segBri[z]);
 }
 
 // EFFECT: rainbow bounce 
@@ -461,87 +450,67 @@ function renderRainbow(z,a,index) {
 }
 
 // RENDER TIME FUNCTIONS
-
-// wait for the automation driver to initialize segment
-// data, then slowly fade in.
-function fadeIn(delta) {
-	if (__boot) {
-	  fadeLevel = 0;
-	  fadeTime = 0;
-	  return
-	}
-	
-	fadeTime += delta;
-	if (fadeLevel < 1) {
-	  fadeLevel = min(1,fadeTime / fadeLength);
-	  fadeLevel = fadeLevel * fadeLevel * fadeLevel;
-	}  
-	else {
-	  state = 2;  // set to normal run state
-	  fadeTime = 0;
-	}
+var testTime = 0;
+function segTester(delta) {
+  testTime += delta;
+  
+  if (testTime > 4000) {
+    z_0[__bri] = !z_0[__bri];
+    z_0[__ftime] = 3;
+    
+    testTime = 0
+  }
 }
 
-function fadeOut(delta) {
-	fadeTime += delta / 1000;
-	if (fadeLevel > 0) {
-	  fadeLevel = max(0,1-(2 * fadeTime / fadeLength));
-	  fadeLevel = fadeLevel * fadeLevel * fadeLevel;
-	}  
-	else {
-	  state = 0;  // set to wait/fadeIn state
-	  fadeTime = 0;
-	}
-}
-
-// once the fade is complete, do nothing as
-// quickly as possible
-function normalRun(delta) { ; }
 
 // evaluate current segment layout and call prerender
 // functions for active effects
+var timebase = 50;
 export function beforeRender(delta) {
 	var start = 0;
 	var i,t;
-
-	states[__state](delta);
+	
+	// millisecond timer
+	timebase = (timebase + delta / 1000) % 3600;
+	
+	//segTester(delta)
 	
   for (i = 0; i < __n_segments; i++) {
     var a = segTable[i];
     
-    // handle smooth level changes
-    t = a[__bri];
-    
     // if brightness was changed since last frame,
-    // set target level and calculate fade step size
-    if (t != fadeTarget[i]) {
-      fadeTarget[i] = t;  
-      fadeStepsize[i] = (t - actualBri[i]) / fadeLength;
+    // set target level and start fade clock
+    if (a[__bri] != fadeTarget[i]) {
+      fadeStart[i] = segBri[i]
+      fadeTarget[i] = a[__bri]; 
+      fadeTime[i] = timebase;
     }    
-    
-    // check for end of fade
-    if (abs(t - actualBri[i]) <= 0.00125) {
-       a[__bri] = actualBri[i] = fadeTarget[i] = t;      
-    } else {
-       actualBri[i] += fadeStepsize[i] * delta / 1000;      
+    else {
+      if (fadeTime[i] > 0) {
+        var t = timebase - fadeTime[i];
+        if (t >= a[__ftime]) {
+           segBri[i] = fadeStart[i] = fadeTarget[i] = a[__bri];
+           fadeTime[i] = 0;
+        } else {
+         t = (t/a[__ftime]);  // pct completion
+         segBri[i] = SmoothFade(fadeStart[i],fadeTarget[i],t);
+        }
+      }
     }
     
-       
     segStart[i] = start;
     start += a[__size];   
     segEnabled[i] = a[__switch] && (segStart[i] < pixelCount) && (a[__size] > 0);
-    segBri[i] = actualBri[i] * fadeLevel;
-
     if (segEnabled[i]) segPreRender[a[__effect]](i,a,delta);
   }
-  segStart[i] = 32765  // set sentinel value at end of list
+  segStart[i] = 32765  // end-of-list sentinel
   segNumber = 0;
 }
 
 // if segment is on, call rendering fn from table
 // if off, set pixel off.  Segments of 0 length
 // are treated as "off".
-var segNumber = 0;
+var segNumber;
 export function render(index) {
   if (index >= segStart[segNumber+1]) segNumber++;
 
