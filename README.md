@@ -7,6 +7,8 @@ that keeping them in a single folder no longer made sense. For now:
 - 1D patterns (for linear strips) are in the **1D** folder
 - 2D and 3D patterns are in the **2D_and_3D** folder
 - Experiments and works-in-progress are in the **Experimental** folder
+- The multisegment pattern and related things have been moved to their own
+folder in this repository:  [Multisegment](https://github.com/zranger1/PixelblazePatterns/tree/master/Multisegment)
 - Shader and signed distance has been moved to its own repository, here:
 [SDF-LED Repository](https://github.com/zranger1/SDF-LED)
 
