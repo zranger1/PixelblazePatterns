@@ -43,7 +43,9 @@ seg_tfade  = 7  # fade time
 if __name__ == "__main__":
     # TODO - grab first Pixelblaze in enumerator list
     
-    pixelblazeIP = "192.168.1.19"     # insert your own IP address here
+    #pixelblazeIP = "192.168.1.19"     # insert your own IP address here
+    pixelblazeIP = input("Enter your Pixelblaze's IP address:\n")
+    
     segments = 12                     # number of segments to create for test
     
     # create a Pixelblaze object.
