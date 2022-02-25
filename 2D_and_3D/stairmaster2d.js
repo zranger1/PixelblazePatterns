@@ -31,9 +31,8 @@ export function render2D(index,x,y) {
   // the bouncing ball is controlled by the wave built in
   // beforeRender.  Here, we figure out if the current LED is in the ball
   // and display it if it is.
-  var ball = hypot(x-0.5,y - ballTimer);
-  ball = (ball > ballRadius) ? 0 : 1-(ball/ballRadius);
-  
+  var ball = 1-(hypot(x-0.5,y - ballTimer)/ballRadius);
+
   // combine ball and stairs for display.
   b = max(stairs,ball);
   
