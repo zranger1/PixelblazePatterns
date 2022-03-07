@@ -1,43 +1,61 @@
-// fake water caustics
-// Part of the search for a nice 2D water pattern for 
-// lighting.  This looks a lot like voronoi noise, but it's
-// not - just  sin/cos circles.  
+// Water Caustics 
+// Bright patterns made by light bouncing around and through the
+// curves made by ripples on the water's surface.  
+//
+// MIT License
+// Take this code and use it to make cool things!
 //
 // 1/27/2022 ZRanger1
 
 var timebase = 0;
-var iterations = 3;
-var inten = 1/24;
-var whiteLevel = 1.125;
+
+export var contrast = 1/24;
+export var whiteLevel = 1.125;
+export var speed = 3.5;
+
+export function sliderSpeed(v) {
+  speed = 1 + 8*v;
+}
 
 export function sliderWhiteLevel(v) {
   whiteLevel = 0.8 + (1-v)
 }
 
-//scale(3,3)
+export function sliderContrast(v) {
+  contrast = 1/(16+24*v);
+}
+
+
 export function beforeRender(delta) {
   timebase = (timebase + delta/1000) % 1000;
   t1 = timebase / 6;
 }
 
-
 export function render2D(index,x,y) {
-  var px = x * PI2 - 20;  py = y * PI2 - 20;
-  var ix = px; var iy = py;
-  var c = 1;
+  var px,py,ix,iy,c;
   
-  // accumulate lumpy circular "waves"
-  for (var n = 0; n < iterations; n++) {
-    var t = t1 * (1-(3.5/n+1));
-    tmp = px + cos(t - ix) + sin(t + iy); 
-    iy = py + sin(t - iy) + cos(t + ix);
-    ix = tmp;
+  // scale coords to work well as angles for sin/cos
+  px = x * PI2 - 20;  py = y * PI2 - 20;
+  ix = px; iy = py;
+  c = 1;
 
-    c += 1/hypot(px/sin(t + ix)*inten, py/cos(t + iy)*inten)
-  }
+  // build a couple of lumpy circular "waves"
+  var t = t1 * (1-speed);
+  tmp = px + cos(t - ix) + sin(t + iy); 
+  iy = py + sin(t - iy) + cos(t + ix);
+  ix = tmp;
+
+  c += 1/hypot(px/sin(t + ix)*contrast, py/cos(t + iy)*contrast)
+
+  var t = t1 * (1-speed/2);
+  tmp = px + cos(t - ix) + sin(t + iy); 
+  iy = py + sin(t - iy) + cos(t + ix);
+  ix = tmp;
+
+  c += 1/hypot(px/sin(t + ix)*contrast, py/cos(t + iy)*contrast)
   
-  // scale and gamma correct
-  c = 1.55-sqrt(c/iterations);
+  // scale, gamma correct and draw!
+  c = 1.65-sqrt(c/2);
   c = c * c * c * c;
   c = clamp(c,0,1);
   
