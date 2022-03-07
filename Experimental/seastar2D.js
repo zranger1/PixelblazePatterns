@@ -1,7 +1,9 @@
 // Sea Star 2D
 // Under water, looking up at waves and strange sea creatures
-// nearer the surface.
-// Makes a nice, atmospheric light panel.
+// nearer the surface.   Makes a nice, atmospheric light panel.
+//
+// MIT License
+// Take this code and use it to make cool things!
 //
 // 10/27/2021 ZRanger1
 
