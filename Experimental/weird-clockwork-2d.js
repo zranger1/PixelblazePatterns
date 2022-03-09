@@ -17,12 +17,12 @@ export function beforeRender(delta) {
 
 export var r,l;
 export function render2D(index,x,y) {
-  rad = frac(x*x+y*y); //hypot(x,y);
+  rad = frac(x*x+y*y); 
   ang = atan2(y,x);
-  t = timebase + .2*wave(timebase)/rad;
+  t = timebase + .02*wave(timebase)/rad;
   xs = sin(PI*rad+t);
   
-  l = abs(0.65*(sin(t) + sin(t1 + ang * 4))); 
+  l = 0.65*(sin(t) + sin(t1 + ang * 4)); 
 
   r = -sin(rad*5+ang-t1+xs);
   g = sin(rad * 16+ang-t1+xs);
@@ -33,5 +33,5 @@ export function render2D(index,x,y) {
   r = r / m; g = g/m; b = b/m;
   r = r * l ;g = g * l; b = b * l;  
   
-  rgb(r*r,g*g,b*b)
+  rgb(r,g,b)
 }
