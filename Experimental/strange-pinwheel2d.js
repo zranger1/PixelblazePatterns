@@ -11,7 +11,7 @@ export function sliderSpeed(v) {
 }
 
 translate(-0.5,-0.5);
-scale(1.25,1.25);
+//scale(1.25,1.25);
 
 export function beforeRender(delta) {
   timebase = time(0.15) * 10
@@ -19,9 +19,9 @@ export function beforeRender(delta) {
 }
 
 export function render2D(index,x,y) {
-  d = abs(frac((x*x + y*y) - t1));  // waves
+  d = 1-wave(hypot(x,y) - t1);  // waves
   a = abs(atan2(x,y)-t1) % (2-wave(time(0.2)));  // rays
   
   b = max(a,d); 
-  hsv(b-d,1,b*b*b)
+  hsv(b-d,a+b,b*b*b)
 }
