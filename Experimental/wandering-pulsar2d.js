@@ -1,9 +1,5 @@
-// Wandering Pulsar 2D
-// Another spinning, pulsing, radial experiment...
-//
-// MIT License
-// Take this code and use it to make cool things!
-//
+// Sunwheel2d
+// Another radial experiment
 // 3/9/2022 ZRanger1 
 //
 
@@ -34,9 +30,9 @@ export function beforeRender(delta) {
   t2 = t1 * 12;
   t3 = t1 * 3;
   t4 = t1 * 7;
-  orbitX = sin(t1 * 0.5) * 0.3;
-  orbitY = sin(t1 * 0.8) * 0.3;
-  core = 1+0.22*sin(t1 * 4);
+  orbitX = sin(t1 * 0.5) * 0.275;
+  orbitY = sin(t1 * 0.8) * 0.275;
+  core = 0.925+0.22*sin(t1 * 4);
 }
 
 export function render2D(index,x,y) {
@@ -52,7 +48,6 @@ export function render2D(index,x,y) {
   
   // g is brightest at the center of the lobes
   g = (r < 0) ? r : r * sin(r);
-
 
   // constant b makes the brightest areas sunny yellow and the background
   // a pleasant blue.
