@@ -17,16 +17,15 @@ function circle(u,v,radius,cx,cy) {
     return r;
 }
 
-
 function ringer(u,v) {
   var a = 0;
   var radius = 0.8;
   cx = 0; cy = 0;
   var dec = radius * 0.25;
   
-  for (var i = 0; i < 4;i++) {
-    cx = dec * sin(2 * timebase + i+1);
-    cy = dec * cos(timebase+i+1);
+  for (var i = 1; i < 5;i++) {
+    cx = dec * sin(2 * timebase + i);
+    cy = dec * cos(timebase+i);
     a += circle(u,v,radius,cx,cy);
     radius -= dec;
   }
@@ -34,6 +33,7 @@ function ringer(u,v) {
 }
 
 
+var bri;
 var timebase = 0;
 var t1;
 export function beforeRender(delta) {
@@ -43,7 +43,7 @@ export function beforeRender(delta) {
 
 translate(-0.5,-0.5);
 export function render2D(index,x,y) {
-  var hue = hypot(x,y);
-  var bri = ringer(x,y);
+  hue = hypot(x,y);
+  bri = ringer(x,y);
   hsv(hue-t1,1,bri);
 }
