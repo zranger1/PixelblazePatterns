@@ -1,4 +1,8 @@
 // Glowing, neon strands and webs... 
+//
+// The problem with laser webs is that somewhere nearby
+// there's always a giant laser spider!
+//
 // For 2D displays.
 // 9/10/2021 ZRanger1
 
