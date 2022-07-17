@@ -1,11 +1,11 @@
-// Traffic moving around city blocks.
+// Time-lapse video of traffic moving around city blocks.
 //
 //  MIT LICENSE
 //
-// 4/2/2022 ZRanger1
+// 7/16/2022 ZRanger1
 
 export var repeats = 4
-export var lineWidth = 0.0063;
+export var lineWidth = 0.007;
 export var distortion = 0.006;
 var xWeight = 0;
 var yWeight = 1;
@@ -13,21 +13,20 @@ var t1;
 
 // UI 
 export function sliderLineWidth(v) {
-  lineWidth = mix(0.004,0.01,v*v);
+  lineWidth = mix(0.004,0.02,v*v);
 }
 
 export function sliderRepeats(v) {
   repeats = 2+floor(v * 4);
 }
 
-// Utilities
-function mix(start,end,val) {
-  return start * (1-val) + end * val;
+export function sliderTimeDistortion(v) {
+   distortion = 0.05 * v*v;
 }
 
-function smoothstep(l,h,v) {
-    var t = clamp((v - l) / (h - l), 0.0, 1.0);
-    return t * t * (3.0 - 2.0 * t);
+// linear interpolator
+function mix(start,end,val) {
+  return start * (1-val) + end * val;
 }
 
 export function beforeRender(delta) {
@@ -39,7 +38,7 @@ export function beforeRender(delta) {
 
 export function render2D(index,x,y) {
   x = x * xWeight + y * yWeight;
-  y = y * xWeight + -x * yWeight;
+  y = y * xWeight - x * yWeight;
   x = (abs(mod(x * repeats,2) - 1)) << 2;
   y = (abs(mod(y * repeats,2) - 1)) << 2;
 
