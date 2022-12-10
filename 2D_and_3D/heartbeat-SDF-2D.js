@@ -1,7 +1,10 @@
 // SDF Heartbeat 2D
 //
-// anti-aliased beating heart using 2D signed distance functions from
+// Another anti-aliased beating heart using 2D signed distance functions from
 // https://github.com/zranger1/SDF-LED
+//
+// Inspired by @geekmomproject's heartbeat pattern:
+// https://forum.electromage.com/t/beating-heart-pattern/2418
 //
 // 12/2022 ZRanger1
 
@@ -10,7 +13,8 @@ var heartSize;
 // alternate heart sdf. A little better defined than the standard 
 // one on some LED displays
 function heart2(x,y,r) {
-    // correct aspect ratio 
+    // tweak x a little to adjust the aspect ratio of the 
+	// final heart
     x = x / r * 0.75;
     
     // signed distance from 1/2 heart, mirrored about x axis
