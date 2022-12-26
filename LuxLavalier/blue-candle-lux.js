@@ -6,44 +6,87 @@
 // MIT License
 // 12/22/2022 ZRanger1
 
-var t1,t2;
 
-// move coordinate origin to 0 
+var numTwinklers = 3
+var maxBri = 0.65
+var decayRate = 0.002;
+export var tIndex = array(numTwinklers);
+export var tPos = 0;
+export var twinklers = array(numTwinklers);
+var twinkleState = array(numTwinklers);
+var timebase;
+
+// move coordinate origin to 0 and flip y axis so we can
+// put the candle at the bottom (comment out the scale() statement if
+// you don't need it for your display.
 translate(-0.5,-0.5);
 
+function sortIndex(v1, v2) {
+  return (twinklers[v1] < twinklers[v2]) ? -1 : 0;
+}
+
 export function beforeRender(delta) {
+  timebase = (timebase + delta/1000) % 3600;
+  
   // generate sketchy 3 octave sine wave noise for flame movement
-  t1 = -0.875+(wave(time(0.06)) + wave(time(0.03))*0.5 + wave(time(0.015))*0.25);
-  t2 = triangle(time(0.3));
+  t1 = -0.875+(wave(time(0.06)) + wave(time(0.03))/2 + wave(time(0.015))/4); 
+  
+  // timer for blue flame's noise flicker
+  t2 = timebase * 8;
+  
+  for (i = 0; i < numTwinklers;i++) {
+     if (twinkleState[i] <= 0) {
+       twinklers[i] = floor(random(pixelCount));
+       twinkleState[i] = max(0.1,random(maxBri));
+
+     }
+     else {
+       twinkleState[i] -= decayRate;
+     }
+     tIndex[i] = i;                
+  }
+  
+  arraySortBy(tIndex, sortIndex);
+  ak = tPos
+  tPos = 0;
 }
 
 export function render2D(index,x,y) {
-  // calculate position and width of candle at base of flame, and
-  // very dim blue background
-  f = (y < -0.375) + 0.06
+
+  // calculate position and width of candle at base of flame
+  f = max(0,(-(abs(x) - 0.425)) * (y < -0.4));  
 
   // adjust aspect ratio to make flame taller and less round
-  x *= 1.75
+  x *= 1.75;
   
   // calculate x displacement value for this y coord
-  var s1 = (-0.5+wave(6*y * t1)) * (y+0.5) * 0.3;
-
+  x += (-0.5+wave(6*y * t1)) * (y+0.5) * 0.3;
+  
   // inner (blue) circle
-  d = abs(hypot(x+s1,y)-0.1)
-  s = 1-smoothstep(0,0.2,d);  
+  d = (hypot(x,y)-0.1)+(y/3);
+  s = 1-clamp(d/0.15,0,1);
+  s += s * (.65*perlin(x*6,y*8,t2,PI))
 
   // outer (orange) circle
-  d = abs(hypot(x+s1,y)-0.325)
-  h = 1-smoothstep(0,0.178,d);
-  
-  var s2 = -0.1*wave(t2*(s+h))  
+  d = abs(hypot(x,y)-0.33);
+  h = 1-smoothstep(0,0.15,d);
 
   // build the flame + candle color
   // edge is red with a tiny amount of green added to make yellow at bottom
   // center and candle are blue
-  r = s * 0.2 + h * 0.9 + s2;
-  g = s * 0.35 + (h * 0.2*(1-2*y)) + s2;
-  b = s + s2 + f
-
-  rgb(r,g,b);
+  r = s * 0.2 + h * 0.9;
+  g = s * 0.3 + (h * 0.4*(1-2*y));
+  b = s + f
+  
+  if ((r+g+b) > 0.05) {
+    rgb(r,g,b);
+  } 
+  else {
+    if (tPos < numTwinklers && index == twinklers[tIndex[tPos]]) {
+      hsv(0.025,0.15,twinkleState[tIndex[tPos]])
+      tPos++;
+      return;
+    }    
+    hsv(0.6667,1,0.02)
+  }
 }
