@@ -6,12 +6,12 @@
 
 
 var numTwinklers = 3
-var maxBri = 0.65
-var decayRate = 0.002;
+var twinkleSpeed = 0.01
 export var tIndex = array(numTwinklers);
 export var tPos = 0;
 export var twinklers = array(numTwinklers);
 var twinkleState = array(numTwinklers);
+var twinkleIncrement = array(numTwinklers);
 var timebase;
 
 // move coordinate origin to 0 and flip y axis so we can
@@ -37,11 +37,12 @@ export function beforeRender(delta) {
   for (i = 0; i < numTwinklers;i++) {
      if (twinkleState[i] <= 0) {
        twinklers[i] = floor(random(pixelCount));
-       twinkleState[i] = max(0.1,random(maxBri));
+       twinkleIncrement[i] = 0.0075+twinkleSpeed * random(1);
+       twinkleState[i] = 1;
 
      }
      else {
-       twinkleState[i] -= decayRate;
+       twinkleState[i] -= twinkleIncrement[i];
      }
      tIndex[i] = i;                
   }
@@ -85,7 +86,7 @@ export function render2D(index,x,y) {
   else {
     // if it's a twinkling "star" in the on state, light it up!
     if (tPos < numTwinklers && index == twinklers[tIndex[tPos]]) {
-      hsv(0.025,0.15,twinkleState[tIndex[tPos]])
+      hsv(0.025,0.15,triangle(twinkleState[tIndex[tPos]]))
       tPos++;
       return;
     }  
