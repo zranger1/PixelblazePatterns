@@ -86,7 +86,7 @@ export function render2D(index,x,y) {
   else {
     // if it's a twinkling "star" in the on state, light it up!
     if (tPos < numTwinklers && index == twinklers[tIndex[tPos]]) {
-      hsv(0.025,0.15,triangle(twinkleState[tIndex[tPos]]))
+      hsv(0.025,0.15,0.75*wave(-.25+twinkleState[tIndex[tPos]]))
       tPos++;
       return;
     }  
