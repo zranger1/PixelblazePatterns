@@ -1,23 +1,25 @@
 /*
- Bouncer 2D/3D
+ Bouncer 2D/3D v2
  
  Bounces (up to 20) objects - spheres or square "tiles" - around a 2D or 3D display. 
- Use sliders to set object count, size and speed.  
+ Use sliders to set object count, size and speed.  Updated so it can run on 3D objects
+ driven by multiple Pixelblazes synchronized with Firestorm.  
  
  Requires a 2D or 3D LED array and appropriate pixel mapper.
  
  MIT LICENSE
- 
- Version  Author        Date       
- 1.0.2    JEM(ZRanger1) 05/20/2021 
+ 2021-2023 ZRanger1 
+
 */ 
 
 // Global Variables
 var maxBalls = 20;
 export var numBalls = 6;
 export var ballSize = 0.06;
-export var speed = 0.075;
+export var speed = 25;
 export var ballSize3D = ballSize * 4 ;
+var t1;
+
 var ballShape = 0;  // 0 - round, 1 = square
 
 // array of ball vectors
@@ -34,7 +36,7 @@ export function sliderSize(v) {
 }
 
 export function sliderSpeed(v) {
-  speed = 0.15 * v;
+  speed = 100 * v;
   initBalls();
 }
 
@@ -51,17 +53,17 @@ function createBalls() {
 
 // create ball vector with a random position, direction, speed, color
 function initBalls() {
-  var hue = random(1);
+  var hue = prng(1);
   for (var i = 0; i < numBalls; i++) {
     var b = balls[i];  
     
-    b[0] = random(1);     // x pos
-    b[1] = random(1);     // y pos
-    b[2] = random(1);     // z pos    
+    b[0] = prng(1);     // x pos
+    b[1] = prng(1);     // y pos
+    b[2] = prng(1);     // z pos    
   
-    b[3] = random(speed); // x vec
-    b[4] = random(speed); // y vec
-    b[5] = random(speed); // z vec   
+    b[3] = prng(speed); // x vec
+    b[4] = prng(speed); // y vec
+    b[5] = prng(speed); // z vec   
     
     b[6] = hue;
     hue += 0.619033
@@ -69,14 +71,14 @@ function initBalls() {
 }
 
 // move balls and bounce them off "walls"
-function bounce() {
+function bounce(delta) {
   for (var i = 0; i < numBalls; i++) {
     var b = balls[i];
     
 // move ball    
-    b[0] += b[3];
-    b[1] += b[4];
-    b[2] += b[5];
+    b[0] += b[3] * delta;
+    b[1] += b[4] * delta;
+    b[2] += b[5] * delta;
   
 // bounce off walls by flipping vector element sign when we hit.
 // If we do hit a wall, we exit early, trading precision
@@ -91,18 +93,17 @@ function bounce() {
   }
 }
 
-// compute brightness and saturation of pixel on our sphere
-function drawBall2D(dx,dy,dz) {
-  
-}
-
+prngSeed(PI2);
 createBalls();
 initBalls();
 
+var lastTime = 0;
 export function beforeRender(delta) {
-  bounce();
+  t1 = time(54.93) * 100
+  delta = t1 - lastTime;
+  lastTime = t1;
+  bounce(delta);
 }
-
 
 export function render2D(index,x,y) {
   var dx,dy;  
@@ -125,7 +126,7 @@ export function render2D(index,x,y) {
     }  
   }
      
-  hsv(h, s, v)
+  hsv(h, s, v*v*v)
 }
 
 export function render3D(index,x,y,z) {

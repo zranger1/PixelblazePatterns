@@ -1,21 +1,19 @@
 /* Snowflake Nova
 
- Started life as a snowflake generator, but turned into more
- of a psychedelic snowflake kaleidoscope thing...
+ Started life as a random snowflake generator, but turned into more
+ of a ridiculously complicated psychedelic snowflake mandela thing...
  
  Simulates the "fold and cut random holes with scissors" snowflake 
  making method, which works in a strange and interesting way
  at the low spatial resolution of LED displays.
  
- Requires a 2D display and appropriate mapping function. Best
- with some sort of diffuser over the display.
+ Requires a Pixelblaze 3 with 2D display and appropriate mapping
+ function. Best with some sort of diffuser over the display.
  
- TODO - Needs some work on performance.
-
  MIT License
  
  Version  Author        Date      
- 1.0.0    JEM(ZRanger1) 06/26/2021
+ 1.1.0    JEM(ZRanger1) 01/31/2023
 */ 
 
 // Basic shape controls
@@ -46,7 +44,7 @@ var outX,outY;
 
 // Animation management
 var frameTimer = 9999;
-export var frameMs = 250;
+export var frameMs = 333;
 var frameSeed = random(32761);
 
 // precalculated sin and cos angles for frequently used angles
@@ -65,7 +63,7 @@ export function sliderDistanceMode(v) {
 // Uncomment the block below for "Advanced" UI, but be warned,
 // some of these parameters are very sensitive, and changes may not result
 // in an attractive or even reasonable display.
-///*
+/*
 export function sliderNarrow(v) {
   NARROW = 4 * v;
 }
@@ -79,7 +77,7 @@ export function sliderThickness(v) {
 }
 
 export function sliderScale(v) {
-  SCALE = 1//.01+2*v;
+  SCALE = .01+2*v;
 }
 
 export function sliderShrink(v) {
@@ -89,23 +87,7 @@ export function sliderShrink(v) {
 export function sliderSpread(v) {
   SPREAD = v * v;
 }
-
-//*/
-
-// 16 bit xorshift PRNG from 
-// http://www.retroprogramming.com/2017/07/xorshift-pseudorandom-numbers-in-z80.html
-// returns a pseudorandom value between 0 and 1
-var xs;
-function roll() {
-  xs ^= xs << 7
-  xs ^= xs >> 9
-  xs ^= xs << 8
-  return frac(abs(xs / 100));
-}
-
-function rollSeed(seed) {
-  xs = seed;
-}
+*/
 
 // rotate so point is aligned with nearest hexagon radial
 function foldRotate(x,y) { 
@@ -132,16 +114,16 @@ function signedDistanceHex(x,y){
 
 // fold,cut add a little random displacement...
 function snowflakeDf(x,y) {
-      rollSeed(frameSeed);  
+      prngSeed(frameSeed);  
       v = 0;      
       for (var i = 0; i < ITERATIONS; i++) {  
         foldRotate(x,y);
         x = outX; y = outY;
       
-        val = x *= (NARROW + roll())-roll();
-        y -= (roll() * SPREAD);
+        val = x *= (NARROW + prng(1))-prng(1);
+        y -= (prng(1) * SPREAD);
       
-        var dec = DECAY + roll();        
+        var dec = DECAY + prng(1);        
         x *= dec; y *= dec;
       
         var dist = signedDistanceHex(x,y);
