@@ -1,7 +1,15 @@
-// Fast(er) palette blending demo. Switches between multiple palettes
-// at a configurable interval, and blends them while switching with
-// configurable transition time.  Also shows how to convert FastLED
-// gradient palettes for use with Pixelblaze.
+// Fast palette blending/switching demo.
+// Switches between multiple palettes at a user-configurable interval, smoothly
+// blending between old palette and new over a user-configurable transition time.
+//
+// The demo shows a super simple animation, while cycling through three palettes.
+// You can add as many palettes as your Pixelblaze's memory allows.
+//
+// Also shows how to convert FastLED gradient palettes for use with Pixelblaze, which
+// gives easy access to a large number of existing palettes and palette tools. 
+//
+// For example, two of the three palettes in this pattern were created with
+// http://fastled.io/tools/paletteknife/ and http://soliton.vm.bytemark.co.uk/pub/cpt-city/index.html
 //
 // MIT License - Have fun!
 //
@@ -41,12 +49,12 @@ arrayMutate(heatmap_gp,(v, i ,a) => v / 255);
 var palettes = [black_Blue_Magenta_White_gp,es_landscape_33_gp,heatmap_gp]
 
 // control variables for palette switch timing (these are in seconds)
-var PALETTE_HOLD_TIME = 5
-var PALETTE_TRANSITION_TIME = 2;
+export var PALETTE_HOLD_TIME = 5
+export var PALETTE_TRANSITION_TIME = 2;
 
 // internal variables used by the palette manager.
 // Usually not necessary to change these.
-var currentIndex = 0;
+export var currentIndex = 0;
 var nextIndex = (currentIndex + 1) % palettes.length;
 
 // arrays to hold rgb interpolation results
@@ -65,6 +73,25 @@ runTime = 0
 // Startup initialization for palette manager
 setPalette(currentPalette);
 buildBlendedPalette(palettes[currentIndex],palettes[nextIndex],blendValue)  
+
+// UI Controls
+
+// transition to the next palette in the sequence
+export function triggerNextPalette() {
+  runTime = 0;
+  inTransition = 1
+}
+
+// how long we stick with a palette before transitioning to
+// the next one
+export function sliderHoldTime(v) {
+  PALETTE_HOLD_TIME = 20 * v * v;
+}
+
+// time to cross-blend between palettes when switching
+export function sliderTransitionTime(v) {
+  PALETTE_TRANSITION_TIME = 10 * v * v;
+}
 
 // user space version of Pixelblaze's paint function. Stores
 // interpolated rgb color in rgbArray
