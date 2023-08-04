@@ -145,7 +145,7 @@ function buildBlendedPalette(pal1, pal2, blend) {
   var entry = 0;
   
   for (var i = 0; i < PALETTE_SIZE;i++) {
-    var v = i / PALETTE_SIZE;
+    var v = i / (PALETTE_SIZE - 1);
     
     paint2(v,pixel1,pal1);
     paint2(v,pixel2,pal2);  

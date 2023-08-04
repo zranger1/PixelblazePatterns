@@ -22,7 +22,7 @@ export function render2D(index,x,y) {
   // (constant multipliers are hand-tuned)
   y -= 0.3 * perlin(x * 2, y * 2, ty, 1.618) 
   
-  // distort x cord to create wave patterns
+  // distort x coord to create wave patterns
   x += 0.1752 * sin(4 * (tx + y))
   
   // quantize color into the specified number of column bins
