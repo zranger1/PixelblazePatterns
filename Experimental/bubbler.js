@@ -1,73 +1,96 @@
-numSparks = 7
-timebase = 0;
+// Bubble Column
+// Rising bubbles in a slowly swirling fluid for
+// well diffused, vertically oriented 1D displays
+// 
+// MIT License
+// Take this code and use it to make cool things!
+// 
+// 12/18/23 ZRanger1
+var numBubbles = 9
+var bubbleSize = 3
+var valveOpen = 0.6
+var fluidH = 0.64
+var fluidB = 0.08
 
-ISEM = 0.8        
-ISER = 0.35;      
+var startVelocity = 10         
+var velocityRange = 1.5 * startVelocity;   
+var acceleration = 0.02
 
-friction = 1 / 600
+var velocity = array(numBubbles)
+var position = array(numBubbles)
+var pixels = array(pixelCount)
 
-velocity = array(numSparks)
-position = array(numSparks)
-pixels = array(pixelCount)
+var timebase = 0
 
-for (i = 0; i < numSparks; i++) {
-  velocity[i] = random(pixelCount)
-  position[i] = randomSpeed();
+// start bubbles off the display so they'll
+// get injected over time by the normal mechanism.
+for (i = 0; i < numBubbles; i++) {
+  position[i] = pixelCount + 10
+}
+
+// UI 
+
+// base hue of "fluid" in column.
+export function hsvPickerFluidHue(h,s,v) {
+  fluidH = h 
+}
+
+// higher == new bubbles more often
+export function sliderBubbleValve(v) {
+  valveOpen = 0.8 * (1 - v)
 }
 
 function randomSpeed() {
-  return ISEM + random(ISER) - ISER / 2
+  return startVelocity  + random(velocityRange) - velocityRange / 2
 }
 
-
 export function beforeRender(delta) {
-  timebase = (timebase + delta / 1000) % 3600;
-  delta *= 0.1
-  lump = perlin(timebase / 2,delta,PI,PI);
+  delta /= 1000;
+  timebase = (timebase + delta) % 3600;
+  valve = 0.5 + 0.5 * perlin(timebase / 2,timebase,21.76,PI2);
   
-  for (i = 0; i < pixelCount; i++)
-    pixels[i] *= min(0.1 / delta, 0.99)
-  
-  // Examining each spark...
-  for (i = 0; i < numSparks; i++) {
-
-    if (velocity[i] <= 0) {
-      if (lump > 0.1) {
-        velocity[i] = randomSpeed();
-        position[i] = 0
-      }
-      continue
+  // check each bubble's contribution to each pixel
+  for (pixel = 0; pixel < pixelCount; pixel++) {
+    pixels[pixel] = 0;
+    for (bubble = 0; bubble < numBubbles; bubble++) {
+      
+      // the line below is (a) a minor optimization, and 
+      // (b) adds an "effervescent" effect when bubbles 
+      // merge. Comment it out if you want smoother bubbling.
+      if (pixels[pixel] > fluidB) break;
+      
+      dist = 1-min(1,abs(pixel - position[bubble])/bubbleSize) 
+      pixels[pixel] += dist * dist * dist * dist
     }
-    
-    // Slow it down (lose some energy) with friction, which is proportional to 
-    // the time that's passed
-    velocity[i] += friction * delta
-    
-    position[i] += velocity[i]  * velocity[i] * delta / 8
-
-    if (position[i] >= 70) {
-      position[i] = 0
-      velocity[i] = 0
-    }
-    
-    pixels[position[i]] += 0.99
   }
+
+  // move the bubbles
+  for (bubble = 0; bubble < numBubbles; bubble++) {
+    position[bubble] += velocity[bubble] * delta;
+    velocity[bubble] += acceleration;
+    
+    // let the bubble run slightly off the end of the strip so
+    // decay looks right at top of column.
+    // When the bubble is no longer visible, set up to 
+    // reinject it at the bottom if the "valve" is open.
+    // 
+    if (position[bubble] > pixelCount) {
+      if (valve >= valveOpen) {
+        position[bubble] = 0;
+        velocity[bubble] = randomSpeed();
+      }
+    }
+  }  
 }
 
 export function render(index) {
-  if (index >=70) {
-    rgb(0,0,0);
-    return;
-  }
-  k = index/pixelCount;
-  a = 0.165*perlin(15*(k - timebase / 10),0.666,0.333,PI2) 
+  a = 0.165*perlin(11*(index/pixelCount - timebase / 10),66.6,33.3,PI2) 
   v = pixels[index]
-  v = v * v;
-   
-  if (v <= 0.08) {
-    hsv(.64+a, 1, 0.08)    
+
+  if (v <= fluidB) {
+    hsv(fluidH + a, 1, fluidB)    
   }
   else {
-    hsv(.64+a, 0.5 , v)
+    hsv(fluidH + a, 0.45 , v)
   }
 }
