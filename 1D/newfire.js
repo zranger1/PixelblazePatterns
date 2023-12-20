@@ -10,8 +10,8 @@
 // Take this code and make cool things
 // 12/19/23 ZRanger1
   
-export var cooling = 0.075 
-export var variability = 0.25
+export var cooling = 0.065
+export var variability = 0.1
 export var mode = 0;
 var midpoint = floor(pixelCount / 2)
 msPerFrame = 40 
@@ -38,7 +38,7 @@ heat[0] = 1;
 var mapModes = [
   (f) => f,  
   (f) => (pixelCount - f + 1),  
-  (f) => 2 * (f < midpoint) ? abs(midpoint - f)  : abs(f - midpoint),
+  (f) => 2 * (f < midpoint) ? abs(midpoint - f)  : f - midpoint,
   (f) => 2 * (f < midpoint) ? f : pixelCount - f + 1
 ]
 
@@ -54,11 +54,15 @@ export function hsvPickerColor(h,s,v) {
 }
 
 export function sliderFlameHeight(v) {
-  cooling = mix(0.025,0.45,1 - v * v)
+  cooling = mix(0.025,0.45,1 - v)
+}
+
+export function sliderHeat(v) {
+  heat[0] = mix(0.4,1,v);
 }
 
 export function sliderSparks(v) {
-  variability = v;
+  variability = v / 2;
 }
 
 export function sliderMode(v) {
@@ -81,7 +85,7 @@ export function beforeRender(delta) {
   // at the pixel below the current one.
   for (i = pixelCount; i >= 1; i--) {
      r = random(cooling);
-     k = max(0,i - (1+random(2)))
+     k = max(0,i - (1 + random(1)))
      heat[i] = max(0,heat[k] - r)
   }
 
@@ -91,8 +95,8 @@ export function beforeRender(delta) {
   // a more interesting look.  Turn up sparks
   // and you get a sputtering burner effect.
   if (random(1) <= variability) {
-    i = floor(random(pixelCount / 10))
-    heat[i] = clamp(heat[i] + (random(4)-0.3),0,1) 
+    i = ceil(random(pixelCount / 8))
+    heat[i] = min(heat[i] + (random(2)-0.5),max(0.575,heat[0])) 
   }
 }  
 
