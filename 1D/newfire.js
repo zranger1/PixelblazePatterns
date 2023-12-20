@@ -1,5 +1,6 @@
-// Newfire - controllable, multicolored, realistic fire for
-// strips, strands and strings.  It's.. 1D Doomfire!
+// Newfire - Doomfire in 1D! 
+// Controllable, multicolored, realistic fire for
+// strips, strands and strings.  
 //
 // (Note that the saturation you choose with the color picker
 // controls the amount of "white heat" at the base of the 
@@ -24,7 +25,7 @@ var heat = array(pixelCount+1)
 
 // heat[0] is our heat source. It drives the whole
 // simulation.We set it to 1, which is the hottest
-// possible value.
+// possible value. 
 heat[0] = 1;
 
 // short functions to map from heat array to actual pixels
@@ -72,7 +73,7 @@ export function beforeRender(delta) {
    frameTimer += delta
   if ( frameTimer < msPerFrame) return;
    frameTimer = 0;
-  
+
   // move heat up the flame column. Instead of 2D DoomFire's
   // regular convolution kernel + wind, we sample hotter pixels
   // below us at slightly randomized distances.  This
