@@ -1,6 +1,10 @@
 // Bubble Column
-// Rising bubbles in a slowly swirling fluid for
-// well diffused, vertically oriented 1D displays
+// Rising bubbles in a slowly swirling fluid,
+// designed for well diffused, vertically oriented
+// 1D displays.
+//
+// Short demo video:
+// https://www.youtube.com/shorts/FzWQfqL0Eko
 // 
 // MIT License
 // Take this code and use it to make cool things!

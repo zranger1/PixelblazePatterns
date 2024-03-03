@@ -1,4 +1,11 @@
-// Time-lapse video of traffic moving around city blocks.
+// Time-lapse video of traffic moving around city blocks...
+//
+// Playing around with coordinate distortion, and fractals related to
+// the Minsky circle algorithm, I found this by accident.  It's hard to 
+// describe, hard to photograph, but hypnotic as heck.
+//
+// Here's the conversation that got me started in this direction:
+//     https://forum.electromage.com/t/minsky-circle-algorithm/1532
 //
 //  MIT LICENSE
 //

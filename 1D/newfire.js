@@ -14,7 +14,8 @@ export var cooling = 0.065
 export var variability = 0.1
 export var mode = 0;
 var midpoint = floor(pixelCount / 2)
-msPerFrame = 40 
+export var msPerFrame = 40 
+var timebase = 0;
 frameTimer = 0 
 hue = 0;
 sat = 1.75;
@@ -70,13 +71,19 @@ export function sliderMode(v) {
 }
  
 export function beforeRender(delta) {
+  timebase = (timebase + delta / 1000) % 3600
   // control the simulation rate so the fire moves at
-  // a more-or-less realistic speed. (This is independent
+  // a more-or-less realistic speed. This is independent
   // of the actual LED frame rate, which will likely be
-  // much higher.)
+  // much higher.
    frameTimer += delta
   if ( frameTimer < msPerFrame) return;
-   frameTimer = 0;
+  
+  frameTimer = 0;
+  
+  // updated to use a slow-moving perlin noise to vary the flame movement speed.
+  // This is better -- it makes the fire much less regular, and more realistic
+  msPerFrame =  max(33, 25 + 50 *  (0.5 + 0.5 * perlin(timebase * 2, 0.333, 0.666, PI)))
 
   // move heat up the flame column. Instead of 2D DoomFire's
   // regular convolution kernel + wind, we sample hotter pixels
