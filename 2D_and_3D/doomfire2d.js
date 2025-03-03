@@ -12,11 +12,11 @@
 
  MIT License
  
- v2.1    JEM(ZRanger1) 10/10/2021 
+ v2.3    JEM(ZRanger1) 6/2024 - Improved sampling
 */ 
 
 // display size - enter the dimensions of your display here
-var width = 16;
+var width = 48;
 var height = 16;
 
 // array is sized one row larger than display so we can permanently
@@ -76,13 +76,14 @@ export function sliderDragonMode(v) {
 
 // simulation speed (ms per frame). Adjust to taste
 // for your display
-export function sliderSpeed(v) {
-  simulationSpeed = v * 200;
-}
+//export function sliderSpeed(v) {
+//  simulationSpeed = v * 200;
+//}
 
 export function sliderWhiteHeat(v) {
   desat = 1.25 + (1-v);
 }
+
 
 // create two buffers for calculation
 function allocateFrameBuffers() {
@@ -125,7 +126,8 @@ function swapBuffers()  {
 function doFire() {
   swapBuffers();
   
-  if (wind > 0) windDirection = (random(1) < wind) ? floor(random(3)) - 1 : windDirection;
+  //if (wind > 0) windDirection = (random(1) < wind) ? floor(random(3)) - 1 : windDirection;
+  windDirection = w2
 
   for (var x = 1; x < lastCol; x++) {
 
@@ -143,12 +145,14 @@ function doFire() {
 // Initialization
 allocateFrameBuffers();
 initBuffers()
-
+export var w2
 export function beforeRender(delta) {
   frameTimer += delta;
 
   if (frameTimer > simulationSpeed) {
-    breathTimer = wave(time(0.1));    
+    breathTimer = wave(time(0.1));
+    w2 = sin(PI2 * time(0.1) )
+    w2 = (w2 < 0) ? -1 : 1;
     
     doFire();  
     perturb();
@@ -158,8 +162,7 @@ export function beforeRender(delta) {
 }
 
 export function render2D(index, x, y) {
-  x = 1+(x * width);  y = y * height;
-  bri = pb2[x][y];
+  bri = pb2[1+(x * width)][y * height];
   bri = bri * bri * bri;
   hsv(baseHue+((0.05*bri)), desat-bri/4,baseBri * bri);
 }
