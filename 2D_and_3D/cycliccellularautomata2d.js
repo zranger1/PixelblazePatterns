@@ -162,8 +162,22 @@ function seedGH(probX,probR) {
     }
   }
   
-// distribute excited cells  
-  probX = floor(pixelCount * probX)
+// distribute excited cells and refractory cells across the width*height
+// grid.  Both counts are derived from the grid capacity (width*height),
+// not pixelCount — on devices where pixelCount exceeds the grid capacity
+// (e.g. a 24x420 = 10080-pixel panel driven by this 16x16 CA), the
+// original `floor(pixelCount * probX)` asked for more placements than
+// the grid can hold, and the "find an empty cell" loop below would then
+// spin forever.  Combined count is also clamped so probX + probR < cap,
+// otherwise the refractory loop wedges once probX exhausts empty slots.
+  var cap = width * height
+  probX = floor(cap * probX)
+  probR = floor(cap * probR)
+  if (probX + probR >= cap) {
+    var scale = (cap - 1) / (probX + probR)
+    probX = floor(probX * scale)
+    probR = floor(probR * scale)
+  }
   for (i = 0; i < probX;) {
     x = random(width); y = random(height);
     if (pb2[x][y] == 0) {
@@ -171,9 +185,8 @@ function seedGH(probX,probR) {
       i++;
     }
   }
-  
+
 // distribute refactory cells
-  probR = floor(pixelCount * probR)
   for (i = 0; i < probR;) {
     x = random(width); y = random(height)
     if (pb2[x][y] == 0) {
