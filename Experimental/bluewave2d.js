@@ -1,41 +1,13 @@
-/*
-uniform float time;
-uniform vec2 mouse;
-uniform vec2 resolution;
-
-void main( void )
-{
-
-    vec2 uPos = ( gl_FragCoord.xy / resolution.xy );//normalize wrt y axis
-    //uPos -= vec2((resolution.x/resolution.y)/3.0, 0.0);//shift origin to center
-    
-    uPos.x -= 1.5;
-    uPos.y -= -0.0;
-    
-    vec3 color = vec3(0.0);
-    float vertColor = 0.0;
-    for( float i = 0.0; i < 10.0; ++i )
-    {
-        float t = time * (1.5);
-    
-        uPos.y += sin( uPos.x*(i+5.0) + t+i/5.0 ) * 0.2;
-        float fTemp = abs(1.0 / uPos.y / 190.0);
-        vertColor += fTemp;
-        color += vec3( fTemp*(0.0-i)/15555555555.0, fTemp*i/15.0, pow(fTemp,0.99)*1.5 );
-    }
-    
-    vec4 color_final = vec4(color, 0);
-    gl_FragColor = color_final;
-
-}
-*/
-
-// dealing with time == 0;
-// scaling of values
-// clipping of colors
-// effectiveness -- max number of lines/objects
+// Boxplosion 2D - An explosion of brightly colored boxes!
+//
+// MIT License
+// Take this code and use it to make cool things!
+//
+// 7/29/2021 - ZRanger1 
+// 10/23/2026 - minor fixes
+//
 export function beforeRender(delta) {
-  t1 = time(.3) * 30;  // time is scaled to match speed of shader
+  t1 = time(.3) * 30;  
   t = t1 * 1.05;  
 }
 
